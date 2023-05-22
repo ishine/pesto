@@ -4,6 +4,7 @@ import operator
 import os
 import random
 import shutil
+import torch
 
 from datetime import datetime
 
@@ -17,13 +18,107 @@ from werkzeug.utils import secure_filename
 # from route.toolbox import tools
 
 from pesto.pesto import pesto
-# pesto(audio_files=['../../../pesto/examples/example.wav'], model_path='models/mir-1k.pth', output_folder='test_results')
 
 # Define the controller of the api endpoint
 api_endpoint = Blueprint('api_endpoint', __name__, url_prefix='/')
 
+user_activity = {}
+
+
+def before_each_api_request():
+    if not request.method == 'OPTIONS':
+        if not request.headers.get("User-Id"):
+            print("creating a new user ..")
+            user_id = "".join(random.choice("abcdefghijklmnopqrstuvwxyz0123456789") for i in range(16))
+
+            folder_path = os.path.join(os.getcwd(), "data", user_id)
+
+            os.makedirs(folder_path)
+        else:
+            user_id = request.headers.get("User-Id")
+
+            folder_path = os.path.join(os.getcwd(), "data", user_id)
+
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+
+        print("user:", user_id, folder_path)
+        g.user_id = user_id
+        g.user_folder_path = folder_path
+
+
+def after_each_api_request():
+    user_id = g.get('user_id', None)
+    user_activity[user_id] = datetime.now().isoformat()
+
+
+@api_endpoint.before_request
+def api_before_request_decorator():
+    before_each_api_request()
+
+
+@api_endpoint.after_request
+def api_after_request_decorator(response):
+    after_each_api_request()
+
+    return response
+
+
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, torch.Tensor):
+            if obj.dim() == 0:
+                return obj.item()
+            return obj.tolist()  # Convert Tensor to nested list representation
+        return super().default(obj)
+
+
+# Flask route /predict-pitch using a POST Request
+@api_endpoint.route('/predict-pitch', methods=['POST'])
+@cross_origin()
+def post_sample_from_environment():
+    response = make_response('Latent space')
+
+    user_id = g.get('user_id', None)
+    user_folder_path = g.get('user_folder_path', None)
+    response.set_cookie('User-Id', value=user_id, domain=request.remote_addr)
+
+    # Check if file was passed as request parameter, if not send response with http code 400
+    if 'file' not in request.files:
+        return Flask.response_class(response='No file(s) sent', status=400, mimetype='application/json')
+
+    # Assign the file passed as parameter to local variable
+    file = request.files['file']
+
+    # Check the file size, and limits it to 70mb (average wav file is 10mb per minute)
+    file_size = file.seek(0, os.SEEK_END)
+    file.seek(0, os.SEEK_SET)
+
+    # Check if the file passed as parameter is has a valid value (not empty)
+    # If not, send response to client, request triggered and error
+    if file.filename == '':
+        return Flask.response_class(response='No file(s) selected', status=400, mimetype='application/json')
+
+    # Assign the file filename to local variable using secure_filename (from Werkzeug) which returns a secure version
+    # of it so that it can be safely stored
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(user_folder_path, filename)
+
+    file.save(file_path)
+
+    predictions = pesto(audio_files=[file_path], output_folder=user_folder_path)
+
+    predictions_timesteps = json.dumps(predictions[0], cls=CustomJSONEncoder)
+    predictions_pitch = json.dumps(predictions[1], cls=CustomJSONEncoder)
+    predictions_confidence = json.dumps(predictions[2], cls=CustomJSONEncoder)
+    predictions_activations = json.dumps(predictions[3], cls=CustomJSONEncoder)
+
+    response.set_data(json.dumps(predictions, cls=CustomJSONEncoder))
+
+    return response, HTTPStatus.OK
+
 
 @api_endpoint.route('/health', methods=["GET"])
-@cross_origin
+@cross_origin()
 def get_ping():
     return Flask.response_class(response="Server is running", status=HTTPStatus.OK)

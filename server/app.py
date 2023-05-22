@@ -15,7 +15,7 @@ from flask_apscheduler import APScheduler
 
 from werkzeug.utils import secure_filename
 
-from api import api_endpoint
+from api import api_endpoint, user_activity
 
 # create and configure the api
 app = Flask(__name__)
