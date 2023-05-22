@@ -108,12 +108,17 @@ def post_sample_from_environment():
 
     predictions = pesto(audio_files=[file_path], output_folder=user_folder_path)
 
-    predictions_timesteps = json.dumps(predictions[0], cls=CustomJSONEncoder)
-    predictions_pitch = json.dumps(predictions[1], cls=CustomJSONEncoder)
-    predictions_confidence = json.dumps(predictions[2], cls=CustomJSONEncoder)
-    predictions_activations = json.dumps(predictions[3], cls=CustomJSONEncoder)
+    predictions_pitch = predictions[1].tolist()
+    predictions_confidence = predictions[2].tolist()
 
-    response.set_data(json.dumps(predictions, cls=CustomJSONEncoder))
+    data = []
+    for pitch, confidence in zip(predictions_pitch, predictions_confidence):
+        data.append({
+            'frequency': pitch,
+            'confidence': confidence
+        })
+
+    response.set_data(json.dumps(data))
 
     return response, HTTPStatus.OK
 
