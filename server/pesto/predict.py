@@ -1,5 +1,5 @@
 import os
-from typing import Sequence
+from typing import Sequence, List
 
 import torch
 import torchaudio
@@ -58,7 +58,7 @@ def predict_from_files(
         output: str | None = None,
         step_size: float = 10.,
         reduction: str = "argmax",
-        export_format: Sequence[str] = ("csv",),
+        export_format: List[str] | None = None,
         no_convert_to_freq: bool = False,
         gpu: int = -1
 ):
@@ -114,7 +114,8 @@ def predict_from_files(
             os.makedirs(output, exist_ok=True)
             output_file = os.path.join(output, os.path.basename(output_file))
 
-        for fmt in export_format:
-            export(fmt, output_file, *predictions)
+        if export_format is not None:
+            for fmt in export_format:
+                export(fmt, output_file, *predictions)
 
     return predictions
