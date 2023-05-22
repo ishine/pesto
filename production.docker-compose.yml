@@ -1,0 +1,67 @@
+version: '3'
+services:
+  server:
+    restart: always
+    build:
+      context: server
+      dockerfile: Dockerfile
+    container_name: pesto-server
+    expose:
+      - "5010"
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    networks:
+      - "proxy"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pesto-server.entrypoints=http"
+      - "traefik.http.routers.pesto-server.rule=Host(`pesto-server.cslmusic.team`)"
+      - "traefik.http.middlewares.pesto-server-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.pesto-server.middlewares=pesto-server-https-redirect"
+      - "traefik.http.routers.pesto-server-secure.entrypoints=https"
+      - "traefik.http.routers.pesto-server-secure.rule=Host(`pesto-server.cslmusic.team`)"
+      - "traefik.http.routers.pesto-server-secure.tls=true"
+      - "traefik.http.routers.pesto-server-secure.tls.certresolver=http"
+      - "traefik.http.routers.pesto-server-secure.service=pesto-server"
+      - "traefik.http.services.pesto-server.loadbalancer.server.port=5001"
+      - "traefik.docker.network=proxy"
+
+
+
+  client:
+    restart: always
+    build:
+      context: client
+      dockerfile: Dockerfile
+    container_name: pesto
+    ports:
+      - "3002:80"
+    expose:
+      - "3002"
+    networks:
+      - "proxy"
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pesto.entrypoints=http"
+      - "traefik.http.routers.pesto.rule=Host(`pesto.cslmusic.team`)"
+      - "traefik.http.middlewares.pesto-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.pesto.middlewares=pesto-https-redirect"
+      - "traefik.http.routers.pesto-secure.entrypoints=https"
+      - "traefik.http.routers.pesto-secure.rule=Host(`pesto.cslmusic.team`)"
+      - "traefik.http.routers.pesto-secure.tls=true"
+      - "traefik.http.routers.pesto-secure.tls.certresolver=http"
+      - "traefik.http.routers.pesto-secure.service=pesto"
+      - "traefik.http.services.pesto.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+
+networks:
+  proxy:
+    external: true
