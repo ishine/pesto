@@ -15,7 +15,7 @@ from http import HTTPStatus
 
 from werkzeug.utils import secure_filename
 
-# from route.toolbox import tools
+from route.tools.parameters.extract_request_argument import extract_request_argument
 
 from pesto.pesto import pesto
 
@@ -83,6 +83,8 @@ def post_sample_from_environment():
     user_folder_path = g.get('user_folder_path', None)
     response.set_cookie('User-Id', value=user_id, domain=request.remote_addr)
 
+    step = extract_request_argument(request, 'step')
+
     # Check if file was passed as request parameter, if not send response with http code 400
     if 'file' not in request.files:
         return Flask.response_class(response='No file(s) sent', status=400, mimetype='application/json')
@@ -106,7 +108,10 @@ def post_sample_from_environment():
 
     file.save(file_path)
 
-    predictions = pesto(audio_files=[file_path], output_folder=user_folder_path)
+    if step is not None:
+        predictions = pesto(audio_files=[file_path], output_folder=user_folder_path, step=float(step))
+    else:
+        predictions = pesto(audio_files=[file_path], output_folder=user_folder_path)
 
     predictions_pitch = predictions[1].tolist()
     predictions_confidence = predictions[2].tolist()
