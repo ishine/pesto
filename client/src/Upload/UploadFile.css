@@ -1,0 +1,16 @@
+.upload-file-main-container {
+    display: flex;
+    flex: 1;
+    height: 100%;
+}
+
+.upload-file-dropzone {
+    width: 20%;
+    height: 20%;
+    background-color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 10px;
+}
