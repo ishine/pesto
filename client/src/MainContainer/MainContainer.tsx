@@ -54,16 +54,17 @@ const MainContainer: FC = () => {
     const data = new FormData();
     data.append("file", file[0]);
     axios
-      .post(`${API_ENDPOINT}/file/upload`, data)
-      .then((res) =>
+      .post(`${API_ENDPOINT}/predict-pitch?step=0.10`, data)
+      .then((res) => {
+        console.log(res);
         setCurrentUploadedFileState((state) => {
           return {
             ...state,
             isLoadingUploading: false,
             isSuccessUploading: true,
           };
-        })
-      )
+        });
+      })
       .catch((err) => console.log(err));
   }, []);
 
