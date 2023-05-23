@@ -22,7 +22,7 @@ const MainContainer: FC = () => {
 
   useEffect(() => {
     if (currentUploadedFileState.isLoadingUploading) {
-      console.log("Fetcging dzta !");
+      console.log("Fetching data !");
       setAudioDataFromServer((data) => {
         return { ...data, isLoadingFetching: true };
       });
