@@ -27,7 +27,7 @@ const MainContainer: FC = () => {
         return { ...data, isLoadingFetching: true };
       });
       axios
-        .get(`${API_ENDPOINT}/audio-data/process`)
+        .get(`${API_ENDPOINT}/health`)
         .then((res) => {
           setAudioDataFromServer((data) => {
             return {
