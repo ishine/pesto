@@ -2,7 +2,7 @@ from .predict import predict_from_file
 
 
 def pesto(model, data_preprocessor,
-          audiofile: str, step: float = 10.):
+          audiofile: str, step: float = 10.):  # 10 milliseconds
     predictions, data_preprocessor = predict_from_file(
         model=model,
         data_preprocessor=data_preprocessor,
