@@ -22,6 +22,13 @@ const MainContainer: FC = () => {
     useState<AudioDataFromServerState>(AudioDataFromServerInitialState);
 
   useEffect(() => {
+    axios
+      .get(`${API_ENDPOINT}/cookies`)
+      .then((res) => localStorage.setItem("User-Id", res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
     if (currentUploadedFileState.isSuccessUploading) {
       console.log("Fetching data !");
       setAudioDataFromServer((data) => {
@@ -33,7 +40,9 @@ const MainContainer: FC = () => {
         };
       });
       axios
-        .get(`${API_ENDPOINT}/audiofile/predict-pitch`)
+        .get(`${API_ENDPOINT}/audiofile/predict-pitch?step=10`, {
+          headers: { "User-Id": localStorage.getItem("User-Id") },
+        })
         .then((res) => {
           setAudioDataFromServer((state) => {
             return {
@@ -60,7 +69,11 @@ const MainContainer: FC = () => {
     const data = new FormData();
     data.append("file", file[0]);
     axios
-      .post(`${API_ENDPOINT}/audiofile/upload`, data)
+      .post(`${API_ENDPOINT}/audiofile/upload`, data, {
+        headers: {
+          "User-Id": localStorage.getItem("User-Id"),
+        },
+      })
       .then((res) => {
         console.log(res);
         setCurrentUploadedFileState((state) => {

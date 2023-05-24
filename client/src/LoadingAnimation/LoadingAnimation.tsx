@@ -9,7 +9,7 @@ interface LoadingAnimationProps {
 const LoadingAnimation: FC<LoadingAnimationProps> = ({ width, height }) => {
   return (
     <div style={{ width: width && width, height: height && height }}>
-      <CircularProgress />
+      <CircularProgress sx={{ color: "white" }} />
     </div>
   );
 };

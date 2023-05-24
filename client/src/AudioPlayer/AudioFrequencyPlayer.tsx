@@ -7,6 +7,7 @@ import {
 } from "../types/AudioPlayerState";
 import useSynth from "../ToneLib/useSynth";
 import "./AudioFrequencyPlayer.css";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 
 interface AudioFrequencyPlayerProps {
   audioData: AudioDataFromServerState;
@@ -63,12 +64,16 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
   return (
     <div className="audio-frequency-player-border-container">
       <div className="audio-frequency-player-main-container">
-        <button
-          className="audio-frequency-player-play-button"
-          onClick={() => handleButtonClick()}
-        >
-          {audioPlayerState.isPlaying ? "Pause" : "Play"}
-        </button>{" "}
+        {audioData.isLoadingFetching ? (
+          <LoadingAnimation />
+        ) : (
+          <button
+            className="audio-frequency-player-play-button"
+            onClick={() => handleButtonClick()}
+          >
+            {audioPlayerState.isPlaying ? "Pause" : "Play"}
+          </button>
+        )}
       </div>
     </div>
   );

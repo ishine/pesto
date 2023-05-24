@@ -9,7 +9,7 @@ interface FrequenceRollProps {
 const FrequenceRoll: FC<FrequenceRollProps> = ({ audioData }) => {
   return (
     <div className="frequence-roll-border-container">
-      <div className="frequence-roll-main-container">FrequenceRoll</div>
+      <div className="frequence-roll-main-container"><div className="frequence-roll-piano-notes-container"></div></div>
     </div>
   );
 };
