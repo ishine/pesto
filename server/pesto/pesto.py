@@ -1,13 +1,15 @@
-from .predict import predict_from_file
+import os
+from typing import List
+from .predict import predict_from_files
 
 
-def pesto(model, data_preprocessor,
-          audiofile: str, step: float = 10.):  # 10 milliseconds
-    predictions, data_preprocessor = predict_from_file(
-        model=model,
-        data_preprocessor=data_preprocessor,
+def pesto(audio_files: List[str], output_folder: str, step: float = 10.):
+    model_path = os.path.join(os.getcwd(), 'models/mir-1k.pth')
 
-        audio_file=audiofile,
+    predictions = predict_from_files(
+        audio_files=audio_files,
+        model_name=model_path,
+        output=output_folder,
         step_size=step
     )
-    return predictions, data_preprocessor
+    return predictions
