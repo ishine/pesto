@@ -18,6 +18,8 @@
 
 .frequence-roll-piano-notes-container {
     display: flex;
-    width: 10%;
+    width: 4%;
+    border-radius: 10px 0 0 10px;
     height: 100%;
+    background-color: var(--light-grey);
 }
