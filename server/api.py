@@ -73,6 +73,53 @@ class CustomJSONEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
+# Flask route /upload using a POST Request
+@api_endpoint.route('/audiofile/upload', methods=['POST'])
+@cross_origin()
+def post_audiofile_upload():
+    response = make_response('Audiofile uploaded')
+
+    user_id = g.get('user_id', None)
+    user_folder_path = g.get('user_folder_path', None)
+
+    # step = extract_request_argument(request, 'step')
+
+    # Check if file was passed as request parameter, if not send response with http code 400
+    if 'file' not in request.files:
+        return Flask.response_class(
+            response='No file sent',
+            status=400,
+            mimetype='application/json'
+        )
+
+    # Assign the file passed as parameter to local variable
+    file = request.files['file']
+
+    # Check the file size, and limits it to 70mb (average wav file is 10mb per minute)
+    file_size = file.seek(0, os.SEEK_END)
+    file.seek(0, os.SEEK_SET)
+
+    # Check if the file passed as parameter is has a valid value (not empty)
+    # If not, send response to client, request triggered and error
+    if file.filename == '':
+        return Flask.response_class(
+            response='No file selected',
+            status=HTTPStatus.BAD_REQUEST,
+            mimetype='application/json'
+        )
+
+    # Assign the file filename to local variable using secure_filename (from Werkzeug) which returns a secure version
+    # of it so that it can be safely stored
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(user_folder_path, filename)
+
+    file.save(file_path)
+
+    response.set_cookie('User-Id', value=user_id, domain=request.remote_addr)
+
+    return response, HTTPStatus.OK
+
+
 # Flask route /predict-pitch using a POST Request
 @api_endpoint.route('/predict-pitch', methods=['POST'])
 @cross_origin()
