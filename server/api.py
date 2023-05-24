@@ -158,7 +158,7 @@ def post_sample_from_environment():
 
     file_path = os.path.join(user_folder_path, filename)
 
-    step = float(step) * 100
+    step = float(step)
     predictions = pesto(audio_files=[file_path], output_folder=user_folder_path, step=step)
 
     predictions_pitch = predictions[1].tolist()
