@@ -80,6 +80,18 @@ class CustomJSONEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
+# Flask route /cookies using a GET Request
+@api_endpoint.route('/cookies', methods=['GET'])
+def get_libraries_information():
+    user_id = g.get('user_id', None)
+
+    response = make_response('Cookies set')
+
+    response.headers["User-Id"] = user_id
+
+    return response, HTTPStatus.OK
+
+
 # Flask route /upload using a POST Request
 @api_endpoint.route('/audiofile/upload', methods=['POST'])
 @cross_origin()
@@ -119,8 +131,6 @@ def post_audiofile_upload():
     file_path = os.path.join(user_folder_path, filename)
 
     file.save(file_path)
-
-    response.headers['User-Id'] = user_id
 
     return response, HTTPStatus.OK
 
