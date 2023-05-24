@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { useDropzone } from "react-dropzone";
 import "./UploadFile.css";
-import { CircularProgress } from "@mui/material";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 
 interface UploadFileProps {
