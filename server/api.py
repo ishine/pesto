@@ -17,12 +17,19 @@ from werkzeug.utils import secure_filename
 
 from route.tools.parameters.extract_request_argument import extract_request_argument
 
-from pesto.pesto import pesto
+from pesto import pesto
+from pesto import load_model, load_dataprocessor
 
 # Define the controller of the api endpoint
 api_endpoint = Blueprint('api_endpoint', __name__, url_prefix='/')
 
 user_activity = {}
+
+device = torch.device('cpu')
+cached_data_preprocessor = load_dataprocessor(device=device)
+
+model_name = os.path.join(os.getcwd(), 'models/mir-1k.pth')
+cached_model = load_model(model_name, device=device)
 
 
 def before_each_api_request():
@@ -82,8 +89,6 @@ def post_audiofile_upload():
     user_id = g.get('user_id', None)
     user_folder_path = g.get('user_folder_path', None)
 
-    # step = extract_request_argument(request, 'step')
-
     # Check if file was passed as request parameter, if not send response with http code 400
     if 'file' not in request.files:
         return Flask.response_class(
@@ -128,6 +133,10 @@ def post_sample_from_environment():
 
     user_folder_path = g.get('user_folder_path', None)
 
+    step = extract_request_argument(request, 'step')
+
+    global cached_model, cached_data_preprocessor
+
     found = False
     for file in os.listdir(user_folder_path):
         if file.endswith((".wav", ".mp3", "aiff", "aif", "aifc")):
@@ -142,7 +151,10 @@ def post_sample_from_environment():
 
     file_path = os.path.join(user_folder_path, filename)
 
-    predictions = pesto(audio_files=[file_path], output_folder=user_folder_path)
+    predictions, data_preprocessor = pesto(model=cached_model, data_preprocessor=cached_data_preprocessor,
+                                           audiofile=file_path, step=float(step))
+
+    cached_data_preprocessor = data_preprocessor
 
     predictions_pitch = predictions[1].tolist()
     predictions_confidence = predictions[2].tolist()
