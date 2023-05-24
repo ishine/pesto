@@ -121,44 +121,28 @@ def post_audiofile_upload():
 
 
 # Flask route /predict-pitch using a POST Request
-@api_endpoint.route('/predict-pitch', methods=['POST'])
+@api_endpoint.route('/audiofile/predict-pitch', methods=['GET'])
 @cross_origin()
 def post_sample_from_environment():
     response = make_response('Latent space')
 
-    user_id = g.get('user_id', None)
     user_folder_path = g.get('user_folder_path', None)
-    response.set_cookie('User-Id', value=user_id, domain=request.remote_addr)
 
-    step = extract_request_argument(request, 'step')
+    found = False
+    for file in os.listdir(user_folder_path):
+        if file.endswith((".wav", ".mp3", "aiff", "aif", "aifc")):
+            filename = file
+            found = True
+    if not found:
+        return Flask.response_class(
+            response='Unauthorized',
+            status=HTTPStatus.UNAUTHORIZED,
+            mimetype='application/json'
+        )
 
-    # Check if file was passed as request parameter, if not send response with http code 400
-    if 'file' not in request.files:
-        return Flask.response_class(response='No file(s) sent', status=400, mimetype='application/json')
-
-    # Assign the file passed as parameter to local variable
-    file = request.files['file']
-
-    # Check the file size, and limits it to 70mb (average wav file is 10mb per minute)
-    file_size = file.seek(0, os.SEEK_END)
-    file.seek(0, os.SEEK_SET)
-
-    # Check if the file passed as parameter is has a valid value (not empty)
-    # If not, send response to client, request triggered and error
-    if file.filename == '':
-        return Flask.response_class(response='No file(s) selected', status=400, mimetype='application/json')
-
-    # Assign the file filename to local variable using secure_filename (from Werkzeug) which returns a secure version
-    # of it so that it can be safely stored
-    filename = secure_filename(file.filename)
     file_path = os.path.join(user_folder_path, filename)
 
-    file.save(file_path)
-
-    if step is not None:
-        predictions = pesto(audio_files=[file_path], output_folder=user_folder_path, step=float(step))
-    else:
-        predictions = pesto(audio_files=[file_path], output_folder=user_folder_path)
+    predictions = pesto(audio_files=[file_path], output_folder=user_folder_path)
 
     predictions_pitch = predictions[1].tolist()
     predictions_confidence = predictions[2].tolist()
