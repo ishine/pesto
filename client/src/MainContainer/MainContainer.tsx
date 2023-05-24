@@ -12,6 +12,7 @@ import {
 } from "../types/AudioDataFromServer";
 import AudioFrequencyPlayer from "../AudioPlayer/AudioFrequencyPlayer";
 import FrequenceRoll from "../FrequenceRoll/FrequenceRoll";
+import AudioRecorder from "../AudioRecorder/AudioRecorder";
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
@@ -24,13 +25,12 @@ const MainContainer: FC = () => {
   useEffect(() => {
     axios
       .get(`${API_ENDPOINT}/cookies`)
-      .then((res) => localStorage.setItem("User-Id", res.data))
+      .then((res) => localStorage.setItem("User-Id", res.headers["user-id"]))
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
     if (currentUploadedFileState.isSuccessUploading) {
-      console.log("Fetching data !");
       setAudioDataFromServer((data) => {
         return {
           ...data,
@@ -58,16 +58,21 @@ const MainContainer: FC = () => {
   }, [currentUploadedFileState.isSuccessUploading]);
 
   const onUpload = useCallback((file: File[]) => {
+    uploadFileToServer(file[0]);
+  }, []);
+
+  const uploadFileToServer = (file: File) => {
+    console.log(file);
     setCurrentUploadedFileState((state) => {
       return {
         ...state,
         isLoadingUploading: true,
         isSuccessUploading: false,
-        file: file[0],
+        file: file,
       };
     });
     const data = new FormData();
-    data.append("file", file[0]);
+    data.append("file", file);
     axios
       .post(`${API_ENDPOINT}/audiofile/upload`, data, {
         headers: {
@@ -75,7 +80,6 @@ const MainContainer: FC = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         setCurrentUploadedFileState((state) => {
           return {
             ...state,
@@ -85,7 +89,13 @@ const MainContainer: FC = () => {
         });
       })
       .catch((err) => console.log(err));
-  }, []);
+  };
+
+  const onGetAudioRecorderElement = (blob: Blob) => {
+    console.log(blob);
+    const file = new File([blob], "audio-record.wav", { type: blob.type });
+    uploadFileToServer(file);
+  };
 
   return (
     <div className="main-container-main-container">
@@ -95,6 +105,7 @@ const MainContainer: FC = () => {
           onUpload={onUpload}
           file={currentUploadedFileState.file}
         />
+        <AudioRecorder onGetAudioRecorderElement={onGetAudioRecorderElement} />
       </div>
       <div className="right-side-main-container">
         <AudioFrequencyPlayer audioData={audioDataFromServer} />

@@ -25,7 +25,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
   const seqRef = useRef<Tone.Sequence | null>(null);
 
   useEffect(() => {
-    if (audioData.isSuccessFetching && audioData.data.length !== 0)
+    if (audioData.isSuccessFetching && audioData.data.length !== 0) {
       seqRef.current = new Tone.Sequence(
         (time, { frequency, confidence }) => {
           if (confidence > 0.8) {
@@ -35,6 +35,8 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
         audioData.data,
         0.01
       ).start(0);
+      console.log(seqRef.current);
+    }
     return () => {
       seqRef.current?.dispose();
     };
