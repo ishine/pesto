@@ -2,12 +2,15 @@
     display: flex;
     flex: 1;
     height: 100%;
+    border: solid 1px;
+    align-items: center;
+    justify-content: center;
 }
 
 .upload-file-dropzone {
     width: 20%;
     height: 20%;
-    background-color: red;
+    background-color: var(--light-grey);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { AudioDataFromServer } from "../types/AudioDataFromServer";
+import { AudioDataFromServerState } from "../types/AudioDataFromServer";
 import * as Tone from "tone";
 import {
   AudioPlayerInitialState,
@@ -7,37 +7,44 @@ import {
 } from "../types/AudioPlayerState";
 import useSynth from "../ToneLib/useSynth";
 import { rawDataConstant } from "../constants/rawData";
+import "./AudioFrequencyPlayer.css";
 
-interface AudioFequencyPlayerProps {
-  audioData: AudioDataFromServer;
+interface AudioFrequencyPlayerProps {
+  audioData: AudioDataFromServerState;
 }
 
-const AudioFequencyPlayer: FC<AudioFequencyPlayerProps> = ({ audioData }) => {
+const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
   const [audioPlayerState, setAudioPlayerState] = useState<AudioPlayerState>(
     AudioPlayerInitialState
   );
-
   const synth = useSynth({
     envelope: {
       attack: 0.5,
     },
   });
-
   const seqRef = useRef<Tone.Sequence | null>(null);
+
   useEffect(() => {
+    if (audioData.isSuccessFetching && audioData.data.length !== 0)
     seqRef.current = new Tone.Sequence(
       (time, { frequency, confidence }) => {
         if (confidence > 0.8) {
           synth.triggerAttackRelease(frequency, 0.1, time);
         }
       },
-      rawDataConstant,
+      audioData.data,
       0.01
     ).start(0);
     return () => {
       seqRef.current?.dispose();
     };
-  }, [synth]);
+  }, [audioData.isSuccessFetching, audioData.data, synth]);
+
+  useEffect(() => {
+    if (audioData.isSuccessFetching && audioData.data.length !== 0) {
+      console.log(audioData.data);
+    }
+  }, [audioData.isSuccessFetching, audioData.data]);
 
   const handleButtonClick = async () => {
     if (Tone.Transport.state === "started") {
@@ -56,11 +63,11 @@ const AudioFequencyPlayer: FC<AudioFequencyPlayerProps> = ({ audioData }) => {
 
   return (
     <div className="audio-frequency-player-main-container">
-      <button onClick={() => handleButtonClick()}>
+      <button className="audio-frequency-player-play-button" onClick={() => handleButtonClick()}>
         {audioPlayerState.isPlaying ? "Pause" : "Play"}
       </button>{" "}
     </div>
   );
 };
 
-export default AudioFequencyPlayer;
+export default AudioFrequencyPlayer;

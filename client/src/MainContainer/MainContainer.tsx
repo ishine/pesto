@@ -7,10 +7,11 @@ import {
   UploadedFileState,
 } from "../types/UploadedFileType";
 import {
-  AudioDataFromServer,
+  AudioDataFromServerState,
   AudioDataFromServerInitialState,
 } from "../types/AudioDataFromServer";
-import AudioFequencyPlayer from "../AudioPlayer/AudioFequencyPlayer";
+import AudioFrequencyPlayer from "../AudioPlayer/AudioFrequencyPlayer";
+import FrequenceRoll from "../FrequenceRoll/FrequenceRoll";
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
@@ -18,10 +19,10 @@ const MainContainer: FC = () => {
   const [currentUploadedFileState, setCurrentUploadedFileState] =
     useState<UploadedFileState>(UploadedFileInitialState);
   const [audioDataFromServer, setAudioDataFromServer] =
-    useState<AudioDataFromServer>(AudioDataFromServerInitialState);
+    useState<AudioDataFromServerState>(AudioDataFromServerInitialState);
 
   useEffect(() => {
-    if (currentUploadedFileState.isLoadingUploading) {
+    if (currentUploadedFileState.isSuccessUploading) {
       console.log("Fetching data !");
       setAudioDataFromServer((data) => {
         return { ...data, isLoadingFetching: true };
@@ -41,13 +42,14 @@ const MainContainer: FC = () => {
         })
         .catch((err) => console.log(err));
     }
-  }, [currentUploadedFileState.isLoadingUploading]);
+  }, [currentUploadedFileState.isSuccessUploading]);
 
   const onUpload = useCallback((file: File[]) => {
     setCurrentUploadedFileState((state) => {
       return {
         ...state,
         isLoadingUploading: true,
+        isSuccessUploading: false,
         file: file[0],
       };
     });
@@ -64,6 +66,14 @@ const MainContainer: FC = () => {
             isSuccessUploading: true,
           };
         });
+        setAudioDataFromServer((state) => {
+          return {
+            ...state,
+            data: res.data,
+            isSuccessFetching: true,
+            isLoadingFetching: false,
+          };
+        });
       })
       .catch((err) => console.log(err));
   }, []);
@@ -71,11 +81,11 @@ const MainContainer: FC = () => {
   return (
     <div className="main-container-main-container">
       <div className="left-side-main-container">
-        {currentUploadedFileState.file && currentUploadedFileState.file.name}
-        <UploadFile onUpload={onUpload} />
+        <UploadFile isLoading={currentUploadedFileState.isLoadingUploading} onUpload={onUpload} file={currentUploadedFileState.file} />
       </div>
       <div className="right-side-main-container">
-        <AudioFequencyPlayer audioData={audioDataFromServer} />
+        <AudioFrequencyPlayer audioData={audioDataFromServer} />
+        <FrequenceRoll audioData={audioDataFromServer} />
       </div>
     </div>
   );

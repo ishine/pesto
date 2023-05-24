@@ -1,12 +1,16 @@
 import { FC } from "react";
 import { useDropzone } from "react-dropzone";
-import './UploadFile.css'
+import "./UploadFile.css";
+import { CircularProgress } from "@mui/material";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 
 interface UploadFileProps {
   onUpload: (file: any) => void;
+  isLoading: boolean;
+  file: File | null;
 }
 
-const UploadFile: FC<UploadFileProps> = ({ onUpload }) => {
+const UploadFile: FC<UploadFileProps> = ({ onUpload, isLoading, file }) => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "audio/mpeg": [".mp3"],
@@ -20,7 +24,13 @@ const UploadFile: FC<UploadFileProps> = ({ onUpload }) => {
   return (
     <div className="upload-file-main-container">
       <div {...getRootProps({ className: "upload-file-dropzone" })}>
-        Upload file
+        {isLoading ? (
+          <LoadingAnimation />
+        ) : file?.name ? (
+          file?.name
+        ) : (
+          "Upload a file"
+        )}
         <input {...getInputProps()} />
       </div>
     </div>

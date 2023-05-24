@@ -1,0 +1,6 @@
+.frequence-roll-main-container {
+    display: flex;
+    flex: 2;
+    height: 100%;
+    border: solid 1px;
+}
