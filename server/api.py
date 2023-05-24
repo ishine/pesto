@@ -27,7 +27,7 @@ user_activity = {}
 
 def before_each_api_request():
     if not request.method == 'OPTIONS':
-        if not request.headers.get("User-Id"):
+        if not request.cookies.get("User-Id"):
             print("creating a new user ..")
             user_id = "".join(random.choice("abcdefghijklmnopqrstuvwxyz0123456789") for i in range(16))
 
@@ -35,7 +35,7 @@ def before_each_api_request():
 
             os.makedirs(folder_path)
         else:
-            user_id = request.headers.get("User-Id")
+            user_id = request.cookies.get("User-Id")
 
             folder_path = os.path.join(os.getcwd(), "data", user_id)
 
