@@ -25,16 +25,20 @@ const MainContainer: FC = () => {
     if (currentUploadedFileState.isSuccessUploading) {
       console.log("Fetching data !");
       setAudioDataFromServer((data) => {
-        return { ...data, isLoadingFetching: true };
+        return {
+          ...data,
+          isLoadingFetching: true,
+          isSuccessFetching: false,
+          data: [],
+        };
       });
       axios
-        .get(`${API_ENDPOINT}/health`)
+        .get(`${API_ENDPOINT}/audiofile/predict-pitch`)
         .then((res) => {
-          setAudioDataFromServer((data) => {
+          setAudioDataFromServer((state) => {
             return {
-              ...data,
-              frequencies: res.data.frequencies,
-              confidence: res.data.confidence,
+              ...state,
+              data: res.data,
               isSuccessFetching: true,
               isLoadingFetching: false,
             };
@@ -56,7 +60,7 @@ const MainContainer: FC = () => {
     const data = new FormData();
     data.append("file", file[0]);
     axios
-      .post(`${API_ENDPOINT}/predict-pitch`, data)
+      .post(`${API_ENDPOINT}/audiofile/upload`, data)
       .then((res) => {
         console.log(res);
         setCurrentUploadedFileState((state) => {
@@ -66,14 +70,6 @@ const MainContainer: FC = () => {
             isSuccessUploading: true,
           };
         });
-        setAudioDataFromServer((state) => {
-          return {
-            ...state,
-            data: res.data,
-            isSuccessFetching: true,
-            isLoadingFetching: false,
-          };
-        });
       })
       .catch((err) => console.log(err));
   }, []);
@@ -81,7 +77,11 @@ const MainContainer: FC = () => {
   return (
     <div className="main-container-main-container">
       <div className="left-side-main-container">
-        <UploadFile isLoading={currentUploadedFileState.isLoadingUploading} onUpload={onUpload} file={currentUploadedFileState.file} />
+        <UploadFile
+          isLoading={currentUploadedFileState.isLoadingUploading}
+          onUpload={onUpload}
+          file={currentUploadedFileState.file}
+        />
       </div>
       <div className="right-side-main-container">
         <AudioFrequencyPlayer audioData={audioDataFromServer} />

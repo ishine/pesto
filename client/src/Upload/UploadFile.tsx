@@ -22,16 +22,18 @@ const UploadFile: FC<UploadFileProps> = ({ onUpload, isLoading, file }) => {
     noKeyboard: true,
   });
   return (
-    <div className="upload-file-main-container">
-      <div {...getRootProps({ className: "upload-file-dropzone" })}>
-        {isLoading ? (
-          <LoadingAnimation />
-        ) : file?.name ? (
-          file?.name
-        ) : (
-          "Upload a file"
-        )}
-        <input {...getInputProps()} />
+    <div className="upload-file-border-container">
+      <div className="upload-file-main-container">
+        <div {...getRootProps({ className: "upload-file-dropzone" })}>
+          {isLoading ? (
+            <LoadingAnimation />
+          ) : file?.name ? (
+            file?.name
+          ) : (
+            "Upload a file"
+          )}
+          <input {...getInputProps()} />
+        </div>
       </div>
     </div>
   );

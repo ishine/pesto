@@ -6,7 +6,6 @@ import {
   AudioPlayerState,
 } from "../types/AudioPlayerState";
 import useSynth from "../ToneLib/useSynth";
-import { rawDataConstant } from "../constants/rawData";
 import "./AudioFrequencyPlayer.css";
 
 interface AudioFrequencyPlayerProps {
@@ -26,15 +25,15 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
 
   useEffect(() => {
     if (audioData.isSuccessFetching && audioData.data.length !== 0)
-    seqRef.current = new Tone.Sequence(
-      (time, { frequency, confidence }) => {
-        if (confidence > 0.8) {
-          synth.triggerAttackRelease(frequency, 0.1, time);
-        }
-      },
-      audioData.data,
-      0.01
-    ).start(0);
+      seqRef.current = new Tone.Sequence(
+        (time, { frequency, confidence }) => {
+          if (confidence > 0.8) {
+            synth.triggerAttackRelease(frequency, 0.1, time);
+          }
+        },
+        audioData.data,
+        0.01
+      ).start(0);
     return () => {
       seqRef.current?.dispose();
     };
@@ -62,10 +61,15 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
   };
 
   return (
-    <div className="audio-frequency-player-main-container">
-      <button className="audio-frequency-player-play-button" onClick={() => handleButtonClick()}>
-        {audioPlayerState.isPlaying ? "Pause" : "Play"}
-      </button>{" "}
+    <div className="audio-frequency-player-border-container">
+      <div className="audio-frequency-player-main-container">
+        <button
+          className="audio-frequency-player-play-button"
+          onClick={() => handleButtonClick()}
+        >
+          {audioPlayerState.isPlaying ? "Pause" : "Play"}
+        </button>{" "}
+      </div>
     </div>
   );
 };

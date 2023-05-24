@@ -1,6 +1,17 @@
 .frequence-roll-main-container {
     display: flex;
+    flex: 1;
+    height: 90%;
+    background-color: var(--dark-grey);
+    box-shadow: 2px 2px 4px rgb(0 0 0 / 42%);
+    border-radius: 10px;
+
+}
+
+.frequence-roll-border-container {
+    display: flex;
     flex: 2;
     height: 100%;
-    border: solid 1px;
+    align-items: center;
+    justify-content: center;
 }
