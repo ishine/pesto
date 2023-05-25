@@ -25,7 +25,7 @@ const MainContainer: FC = () => {
   useEffect(() => {
     axios
       .get(`${API_ENDPOINT}/cookies`)
-      .then((res) => localStorage.setItem("user-id", res.headers["user-id"]))
+      .then((res) => localStorage.setItem("user_id", res.headers["user-id"]))
       .catch((err) => console.log(err));
   }, []);
 
@@ -41,7 +41,7 @@ const MainContainer: FC = () => {
       });
       axios
         .get(`${API_ENDPOINT}/audiofile/predict-pitch?step=10`, {
-          headers: { "User-Id": localStorage.getItem("User-Id") },
+          headers: { "User-Id": localStorage.getItem("user_id") },
         })
         .then((res) => {
           setAudioDataFromServer((state) => {
@@ -76,7 +76,7 @@ const MainContainer: FC = () => {
     axios
       .post(`${API_ENDPOINT}/audiofile/upload`, data, {
         headers: {
-          "User-Id": localStorage.getItem("User-Id"),
+          "User-Id": localStorage.getItem("user_id"),
         },
       })
       .then((res) => {
