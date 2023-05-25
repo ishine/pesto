@@ -14,9 +14,11 @@ const PianoRoll: FC<FrequenceRollProps> = ({audioData}) => {
   const tones = audioData.data.map((data) => data.tone);
   const confidences = audioData.data.map((data) => data.confidence);
 
+  const confidenceValidatedTones = tones.filter((_, i) => confidences[i] > confidence);
+
   const width = tones.length;
-  const toneMax = Math.ceil(Math.max(...tones) + pianoColumnRollPadding);
-  const toneMin = Math.floor(Math.min(...tones) - pianoColumnRollPadding);
+  const toneMax = Math.ceil(Math.max(...confidenceValidatedTones) + pianoColumnRollPadding);
+  const toneMin = Math.floor(Math.min(...confidenceValidatedTones) - pianoColumnRollPadding);
   const nbOfTones = toneMax - toneMin;
 
   // Calculate the dimensions based on the number of rows (W) and columns (T)
