@@ -6,6 +6,7 @@ interface SimpleSVGComponentProps {
   height?: string;
   cursor?: any;
   alt: string;
+  onClick?: any;
 }
 
 const SimpleSVGComponent: FC<SimpleSVGComponentProps> = ({
@@ -14,10 +15,12 @@ const SimpleSVGComponent: FC<SimpleSVGComponentProps> = ({
   height,
   cursor,
   alt,
+  onClick
 }) => {
   return (
     <>
       <img
+        onClick={onClick && onClick}
         src={icon}
         style={{
           width: width ? width : "100%",

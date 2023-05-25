@@ -1,0 +1,26 @@
+.big-rounded-button-main-container {
+    background-color: #3B3650;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 1px 3px 2px rgb(0 0 0 / 42%);
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: 150ms ease-out;
+    overflow: hidden;
+    text-decoration: underline;
+    box-sizing: border-box;
+}
+
+.big-rounded-button-main-container:hover {
+    box-shadow: 2px 4px 2px rgb(0 0 0 / 42%);
+}
+
+@media screen and (max-width: 950px) {
+    .big-rounded-button-main-container {
+        font-size: 12px !important;
+    }
+
+}
