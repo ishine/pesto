@@ -173,7 +173,7 @@ def post_sample_from_environment():
     data = []
     for tone, confidence, pitch in zip(predictions_tone, predictions_confidence, predictions_pitch):
         data.append({
-            'pitch': pitch,
+            'frequency': pitch,
             'tone': tone,
             'confidence': confidence
         })

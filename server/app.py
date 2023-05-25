@@ -42,27 +42,27 @@ app.register_blueprint(swaggerui_blueprint)
 app.register_blueprint(api_endpoint)
 
 
-def clean_server_job():
-    print("job is starting . ..")
-
-
-class Config:
-    JOBS = [
-        {
-            "id": "clean_server_job",
-            "func": "app:clean_server_job",
-            "args": (),
-            "trigger": "interval",
-            "minutes": 1,
-        }
-    ]
-    SCHEDULER_API_ENABLED = True
-
-
-app.config.from_object(Config())
-scheduler = APScheduler()
-scheduler.init_app(app)
-scheduler.start()
+# def clean_server_job():
+#     print("job is starting . ..")
+#
+#
+# class Config:
+#     JOBS = [
+#         {
+#             "id": "clean_server_job",
+#             "func": "app:clean_server_job",
+#             "args": (),
+#             "trigger": "interval",
+#             "minutes": 1,
+#         }
+#     ]
+#     SCHEDULER_API_ENABLED = True
+#
+#
+# app.config.from_object(Config())
+# scheduler = APScheduler()
+# scheduler.init_app(app)
+# scheduler.start()
 
 if __name__ == '__main__':
     app.run(
