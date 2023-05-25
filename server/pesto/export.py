@@ -4,7 +4,7 @@ import numpy as np
 import torch
 
 
-def export(fmt, output_file, timesteps, pitch, confidence, activations):
+def export(fmt, output_file, timesteps, pitch, confidence, tone, activations):
     output_file = output_file + '.' + fmt
     if fmt == "csv":
         export_csv(output_file, timesteps, pitch, confidence)

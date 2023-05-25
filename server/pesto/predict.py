@@ -46,8 +46,9 @@ def predict(
         pitch = None
     else:
         pitch = reduce_activation(activations, reduction=reduction)
-        if convert_to_freq:
-            pitch = 440 * 2 ** ((pitch - 69) / 12)
+        # if convert_to_freq:
+        #     pitch = 440 * 2 ** ((pitch - 69) / 12)
+        tone = 440 * 2 ** ((pitch - 69) / 12)
 
     # for now, confidence is computed very naively just based on volume
     confidence = cqt.squeeze(1).max(dim=1).values
@@ -55,7 +56,7 @@ def predict(
 
     timesteps = torch.arange(len(confidence)) * data_preprocessor.step_size
 
-    return timesteps, pitch, confidence, activations
+    return timesteps, pitch, confidence, tone, activations
 
 
 @torch.inference_mode()
