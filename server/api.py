@@ -132,7 +132,7 @@ def post_audiofile_upload():
 @api_endpoint.route('/audiofile/predict-pitch', methods=['GET'])
 @cross_origin()
 def post_sample_from_environment():
-    response = make_response('Latent space')
+    response = make_response('Predict pitch')
 
     user_folder_path = g.get('user_folder_path', None)
 
@@ -161,13 +161,15 @@ def post_sample_from_environment():
     step = float(step)
     predictions = pesto(audio_files=[file_path], output_folder=user_folder_path, step=step)
 
-    predictions_pitch = predictions[1].tolist()
+    predictions_tone = predictions[1].tolist()
     predictions_confidence = predictions[2].tolist()
+    predictions_pitch = predictions[3].tolist()
 
     data = []
-    for pitch, confidence in zip(predictions_pitch, predictions_confidence):
+    for tone, confidence, pitch in zip(predictions_tone, predictions_confidence, predictions_pitch):
         data.append({
-            'frequency': pitch,
+            'pitch': pitch,
+            'tone': tone,
             'confidence': confidence
         })
 
