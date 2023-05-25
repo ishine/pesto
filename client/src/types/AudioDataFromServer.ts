@@ -1,5 +1,6 @@
 export type AudioData = {
   frequency: number;
+  tone: number;
   confidence: number;
 };
 
