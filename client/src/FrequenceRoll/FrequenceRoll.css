@@ -18,13 +18,17 @@
 .frequence-roll-piano-notes-container {
     display: flex;
     width: 100%;
+    height: 100%;
     border-radius: 10px;
     overflow: auto;
-    height: 100%;
     background-color: var(--light-grey);
     position: relative;
 }
 
 .frequence-roll-piano-notes-container canvas {
     position: absolute;
+}
+
+.cell:hover {
+    stroke: black;
 }
