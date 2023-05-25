@@ -1,0 +1,50 @@
+.user-audio-source-input-main-container {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    align-items: center;
+}
+
+.user-audio-source-input-border-container {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    align-items: center;
+}
+
+.upload-and-record-border-container {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    align-items: center;
+}
+
+.upload-and-record-main-container {
+    display: flex;
+    height: 90%;
+    width: 98%;
+    box-shadow: 2px 2px 4px rgb(0 0 0 / 42%);
+    border-radius: 10px;
+    background-color: var(--dark-grey);
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.custom-audio-player-main-container {
+    display: flex;
+    box-shadow: 2px 2px 4px rgb(0 0 0 / 42%);
+    border-radius: 10px;
+    background-color: var(--dark-grey);
+    height: 90%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-audio-player-border-container {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    align-items: center;
+}

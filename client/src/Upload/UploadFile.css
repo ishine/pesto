@@ -1,26 +1,15 @@
 .upload-file-main-container {
     display: flex;
-    width: 100%;
-    height: 90%;
     align-items: center;
     justify-content: center;
-    box-shadow: 2px 2px 4px rgb(0 0 0 / 42%);
-    border-radius: 10px;
-    background-color: var(--dark-grey);
-
+    width: 10rem;
+    height: 8rem;
 }
 
-.upload-file-border-container {
-    display: flex;
-    flex: 1;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-}
 
 .upload-file-dropzone {
-    width: 20%;
-    height: 20%;
+    width: 100%;
+    height: 100%;
     background-color: var(--light-grey);
     display: flex;
     align-items: center;

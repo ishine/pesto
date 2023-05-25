@@ -1,0 +1,8 @@
+.rounded-text-info-main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-radius: 50px;
+    background-color: var(--light-grey);
+}

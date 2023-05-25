@@ -13,6 +13,8 @@ import {
 import AudioFrequencyPlayer from "../AudioPlayer/AudioFrequencyPlayer";
 import FrequenceRoll from "../FrequenceRoll/FrequenceRoll";
 import AudioRecorder from "../AudioRecorder/AudioRecorder";
+import UserAudioSourceInput from "../UserAudioSourceInput/UserAudioSourceInput";
+import AudioResults from "../AudioResults/AudioResults";
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
@@ -62,7 +64,6 @@ const MainContainer: FC = () => {
   }, []);
 
   const uploadFileToServer = (file: File) => {
-    console.log(file);
     setCurrentUploadedFileState((state) => {
       return {
         ...state,
@@ -99,18 +100,14 @@ const MainContainer: FC = () => {
 
   return (
     <div className="main-container-main-container">
-      <div className="left-side-main-container">
-        <UploadFile
-          isLoading={currentUploadedFileState.isLoadingUploading}
-          onUpload={onUpload}
-          file={currentUploadedFileState.file}
-        />
-        <AudioRecorder onGetAudioRecorderElement={onGetAudioRecorderElement} />
-      </div>
-      <div className="right-side-main-container">
-        <AudioFrequencyPlayer audioData={audioDataFromServer} />
-        <FrequenceRoll audioData={audioDataFromServer} />
-      </div>
+      <UserAudioSourceInput
+        onGetAudioRecorderElement={onGetAudioRecorderElement}
+        onUploadFile={onUpload}
+        currentUploadedFile={currentUploadedFileState.file}
+        isLoadingUploadedFile={currentUploadedFileState.isLoadingUploading}
+        isSuccessUploadingFile={currentUploadedFileState.isSuccessUploading}
+      />
+      <AudioResults audioData={audioDataFromServer} />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useDropzone } from "react-dropzone";
 import "./UploadFile.css";
-import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
+import LoadingAnimation from "../UI/LoadingAnimation";
 
 interface UploadFileProps {
   onUpload: (file: any) => void;
@@ -21,18 +21,16 @@ const UploadFile: FC<UploadFileProps> = ({ onUpload, isLoading, file }) => {
     noKeyboard: true,
   });
   return (
-    <div className="upload-file-border-container">
-      <div className="upload-file-main-container">
-        <div {...getRootProps({ className: "upload-file-dropzone" })}>
-          {isLoading ? (
-            <LoadingAnimation />
-          ) : file?.name ? (
-            file?.name
-          ) : (
-            "Upload a file"
-          )}
-          <input {...getInputProps()} />
-        </div>
+    <div className="upload-file-main-container">
+      <div {...getRootProps({ className: "upload-file-dropzone" })}>
+        {isLoading ? (
+          <LoadingAnimation />
+        ) : file?.name ? (
+          file?.name
+        ) : (
+          "Upload a file"
+        )}
+        <input {...getInputProps()} />
       </div>
     </div>
   );

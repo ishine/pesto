@@ -1,0 +1,138 @@
+.main-audio-player-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 60%;
+    color: white;
+}
+
+input[type=range].audio-progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-appearance: none;     /*nécessaire pour Chrome */
+    padding: 0;                   /* nécessaire pour IE */
+    font: inherit;                /* même rendu suivant font document */
+    outline: none;
+    color: #000000;               /* sert pour couleur de référence, via currentColor, pour le curseur */
+    background: #FFFFFF;             /* sert pour couleur de fond de la zone de déplacement */
+    background-position: center;
+    background-repeat: no-repeat;
+    box-sizing: border-box;       /* même modèle de boîte pour tous */
+    transition: opacity .2s;
+    cursor: pointer;
+    height: 1px;
+    width: 100%;
+}
+
+/* la zone de déplacement */
+input[type=range].audio-progress-bar::-webkit-slider-runnable-track {
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;  /* supprimé définie sur l'input */
+}
+
+/* le curseur */
+input[type=range].audio-progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;       /* également nécessaire sur le curseur */
+    height: 12px;                /* s'adapte à la hauteur de l'input */
+    width: 12px;
+    border: none;
+    border-radius: 50%;               /* pris en compte sur Webkit et Edge */
+    background: white;       /* pris en compte sur Webkit only */
+}
+
+.audio-player-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1A191E;
+    border: none;
+}
+
+.audio-player-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 84%;
+    height: 100%;
+    gap: 0.6em;
+}
+
+.audio-player-controls-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 21%;
+    height: 100%;
+    border-radius: 25px;
+    gap: 0.4em;
+    box-sizing: border-box;
+}
+
+.audio-player-time-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 80%;
+    border-radius: 25px;
+    gap: 0.1em;
+    box-sizing: border-box;
+}
+
+.rounded-button-container {
+    border-radius: 50%;
+    width: 2.2em;
+    height: 2.2em;
+    background-color: #3F4043;
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 42%);
+    cursor: pointer;
+    margin: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: ease-out 150ms;
+}
+
+.rounded-button-container:hover {
+    box-shadow: 2px 4px 2px rgb(0 0 0 / 42%);
+}
+
+.volume-input-drop-down-container {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1A191E;
+    color: white;
+    padding: 0.75em;
+    border-radius: 10px;
+    width: 8em
+}
+
+.audio-player-time-indicator-container {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.audio-progress-bar-container {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media screen and (max-width: 950px) {
+    .audio-player-controls-container {
+        justify-content: center;
+        width: 12%;
+    }
+}

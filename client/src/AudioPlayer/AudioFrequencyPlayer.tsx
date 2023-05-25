@@ -7,7 +7,8 @@ import {
 } from "../types/AudioPlayerState";
 import useSynth from "../ToneLib/useSynth";
 import "./AudioFrequencyPlayer.css";
-import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
+import LoadingAnimation from "../UI/LoadingAnimation";
+import RoundedTextInfo from "../UI/RoundedTextInfo";
 
 interface AudioFrequencyPlayerProps {
   audioData: AudioDataFromServerState;
@@ -68,6 +69,8 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
       <div className="audio-frequency-player-main-container">
         {audioData.isLoadingFetching ? (
           <LoadingAnimation />
+        ) : audioData.data.length === 0 ? (
+          <RoundedTextInfo text="Waiting for a file ..." />
         ) : (
           <button
             className="audio-frequency-player-play-button"

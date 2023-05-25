@@ -1,13 +1,13 @@
 .header-main-container {
     display: flex;
     align-items: center;
-    justify-content: center;
     width: 99%;
     height: 10vh;
     font-size: 60px;
     background-color: var(--dark-grey);
     color: white;
-    justify-content: center;
     box-shadow: 2px 2px 4px rgb(0 0 0 / 42%);
     border-radius: 10px;
+    padding: 0 2rem;
+    box-sizing: border-box;
 }
