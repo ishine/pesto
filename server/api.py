@@ -121,9 +121,14 @@ def post_audiofile_upload():
     # Assign the file filename to local variable using secure_filename (from Werkzeug) which returns a secure version
     # of it so that it can be safely stored
     filename = secure_filename(file.filename)
-    file_path = os.path.join(user_folder_path, filename)
 
+    audiofile_path = os.path.join(user_folder_path, filename)
+    file_path = os.path.join(user_folder_path, "audiofile.wav")
     file.save(file_path)
+
+    # file_path = os.path.join(user_folder_path, filename)
+    #
+    # file.save(file_path)
 
     return response, HTTPStatus.OK
 
