@@ -25,7 +25,7 @@ const MainContainer: FC = () => {
   useEffect(() => {
     axios
       .get(`${API_ENDPOINT}/cookies`)
-      .then((res) => localStorage.setItem("User-Id", res.headers["user-id"]))
+      .then((res) => localStorage.setItem("user-id", res.headers["user-id"]))
       .catch((err) => console.log(err));
   }, []);
 
