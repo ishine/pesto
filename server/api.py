@@ -16,6 +16,7 @@ from http import HTTPStatus
 from werkzeug.utils import secure_filename
 
 from route.tools.parameters.extract_request_argument import extract_request_argument
+from route.tools.audiofile.convert_to_wav import convert_to_wav
 
 from pesto import pesto
 
@@ -98,7 +99,7 @@ def post_audiofile_upload():
     if 'file' not in request.files:
         return Flask.response_class(
             response='No file sent',
-            status=400,
+            status=HTTPStatus.BAD_REQUEST,
             mimetype='application/json'
         )
 
@@ -118,17 +119,35 @@ def post_audiofile_upload():
             mimetype='application/json'
         )
 
+    for files in os.listdir(user_folder_path):
+        if files.endswith((".wav", ".csv")):
+            os.remove(os.path.join(user_folder_path, files))
+
     # Assign the file filename to local variable using secure_filename (from Werkzeug) which returns a secure version
     # of it so that it can be safely stored
     filename = secure_filename(file.filename)
 
-    audiofile_path = os.path.join(user_folder_path, filename)
-    file_path = os.path.join(user_folder_path, "audiofile.wav")
-    file.save(file_path)
+    if file.filename.endswith((".wav")):
+        file_name, extension = os.path.splitext(filename)
+        file_path = os.path.join(user_folder_path, file_name + extension)
+        file.save(file_path)
 
-    # file_path = os.path.join(user_folder_path, filename)
-    #
-    # file.save(file_path)
+        saved_file_path = os.path.join(user_folder_path, "audiofile" + extension)
+
+        if not convert_to_wav(file_path, saved_file_path):
+            return Flask.response_class(
+                response='Error while processing the audio file',
+                status=HTTPStatus.BAD_REQUEST,
+                mimetype='application/json'
+            )
+
+        os.remove(file_path)
+    else:
+        return Flask.response_class(
+            response='File format not supported',
+            status=HTTPStatus.BAD_REQUEST,
+            mimetype='application/json'
+        )
 
     return response, HTTPStatus.OK
 
@@ -151,7 +170,7 @@ def post_sample_from_environment():
 
     found = False
     for file in os.listdir(user_folder_path):
-        if file.endswith((".wav", ".mp3", "aiff", "aif", "aifc")):
+        if file.endswith((".wav")):
             filename = file
             found = True
     if not found:
