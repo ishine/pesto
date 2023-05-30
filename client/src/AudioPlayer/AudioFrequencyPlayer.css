@@ -1,12 +1,8 @@
 .audio-frequency-player-main-container {
     display: flex;
     flex: 1;
-    justify-content: center;
     align-items: center;
     height: 100%;
-    background-color: var(--dark-grey);
-    box-shadow: 2px 2px 4px rgb(0 0 0 / 42%);
-    border-radius: 10px;
 }
 
 .audio-frequency-player-border-container {
@@ -33,9 +29,10 @@
 }
 
 .audio-frequency-player-controls-container {
-    width: 60%;
+    width: auto;
     gap: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: 1rem;
 }

@@ -1,4 +1,11 @@
-import {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   AudioDataFromServerInitialState,
   AudioDataFromServerState,
@@ -30,7 +37,11 @@ interface AudioFrequencyPlayerProps {
   setAudioPlayerState: Dispatch<SetStateAction<AudioPlayerState>>;
 }
 
-const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData, audioPlayerState, setAudioPlayerState }) => {
+const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
+  audioData,
+  audioPlayerState,
+  setAudioPlayerState,
+}) => {
   // const [audioPlayerState, setAudioPlayerState] = useState<AudioPlayerState>(
   //   AudioPlayerInitialState
   // );
@@ -107,7 +118,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData, audioP
     if (Tone.Transport.state === "started") {
       Tone.Transport.stop();
       setAudioPlayerState((state) => {
-        return {...state, isPlaying: false};
+        return { ...state, isPlaying: false };
       });
     } else {
       await Tone.start();
@@ -123,9 +134,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData, audioP
       <div className="audio-frequency-player-main-container">
         {audioData.isLoadingFetching ? (
           <LoadingAnimation />
-        ) : audioData.data.length === 0 ? (
-          <RoundedTextInfo text="Waiting for a file ..." />
-        ) : (
+        ) : audioData.data.length !== 0 && (
           <div className="audio-frequency-player-controls-container">
             {audioPlayerState.isPlaying ? (
               <SimpleSVGComponent
