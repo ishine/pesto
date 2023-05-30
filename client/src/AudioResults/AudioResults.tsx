@@ -22,7 +22,8 @@ const AudioResults: FC<AudioResultsProps> = ({ audioData }) => {
         setAudioPlayerState={setAudioPlayerState} />
       <FrequenceRoll
         audioData={audioData}
-        audioPlayerState={audioPlayerState} />
+        audioPlayerState={audioPlayerState}
+        setAudioPlayerState={setAudioPlayerState} />
     </div>
   );
 };

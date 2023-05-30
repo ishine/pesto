@@ -24,9 +24,14 @@ const MainContainer: FC = () => {
   const [audioDataFromServer, setAudioDataFromServer] =
     useState<AudioDataFromServerState>(AudioDataFromServerInitialState);
 
+  const id = localStorage.getItem('user_id');
+  const headers = id ? { 'User-Id': id } : {};
+
   useEffect(() => {
     axios
-      .get(`${API_ENDPOINT}/cookies`)
+      .get(`${API_ENDPOINT}/cookies`, {
+        headers: headers
+      })
       .then((res) => localStorage.setItem("user_id", res.headers["user-id"]))
       .catch((err) => console.log(err));
   }, []);

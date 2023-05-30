@@ -27,7 +27,7 @@ interface AudioFrequencyPlayerProps {
   audioData: AudioDataFromServerState;
 
   audioPlayerState: AudioPlayerState;
-  setAudioPlayerState:  Dispatch<SetStateAction<AudioPlayerState>>;
+  setAudioPlayerState: Dispatch<SetStateAction<AudioPlayerState>>;
 }
 
 const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData, audioPlayerState, setAudioPlayerState }) => {

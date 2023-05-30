@@ -9,15 +9,15 @@ interface FrequenceRollProps {
   audioData: AudioDataFromServerState;
 
   audioPlayerState: AudioPlayerState;
+  setAudioPlayerState: Dispatch<SetStateAction<AudioPlayerState>>;
 }
 
 interface PianoRollProps {
   audioData: AudioDataFromServerState;
-  time: number;
 }
 
-const PianoRoll: FC<PianoRollProps> = ({audioData, time}) => {
-  const confidence = 0.8;
+const PianoRoll: FC<PianoRollProps> = ({audioData}) => {
+  const confidence = 0.7;
   const pianoColumnRollPadding = 2
 
   const tones = audioData.data.map((data) => data.tone);
@@ -92,20 +92,54 @@ const PianoRoll: FC<PianoRollProps> = ({audioData, time}) => {
     );
 };
 
-const FrequenceRoll: FC<FrequenceRollProps> = ({ audioData, audioPlayerState }) => {
-  const [value, setValue] = useState<number>(0);
+const FrequenceRoll: FC<FrequenceRollProps> = ({ audioData, audioPlayerState, setAudioPlayerState }) => {
 
-  const handleChange = (event: any, newValue: any) => {
-    console.log(audioPlayerState.currentTime);
-    setValue(newValue);
-  };
+  const [time, setTime] = useState<number>(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(Tone.Transport.seconds);
+
+      // console.log(Tone.Transport.seconds / 100, audioData.data.length)
+      //
+      // if (Tone.Transport.seconds / 95 > audioData.data.length && Tone.Transport.state === "started") {
+      //   Tone.Transport.stop();
+      //   setAudioPlayerState((state) => {
+      //     return { ...state, isPlaying: false, currentTime: 0 };
+      //   });
+      // }
+
+      // if ((Tone.Transport.seconds % (audioData.data.length / 100)) <= 0.1) {
+      //   console.log("reset time bar");
+      //   setTime(0);
+      // } else {
+      //   setTime((Tone.Transport.seconds % (audioData.data.length / 100)));
+      // }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="frequence-roll-border-container">
       <div className="frequence-roll-main-container">
           <div className="frequence-roll-piano-notes-container">
-            <PianoRoll audioData={audioData} time={value} />
-            <Slider value={value} min={0} max={audioData.data.length} step={0.01} onChange={handleChange}/>
+            <PianoRoll audioData={audioData} />
+            <Slider value={time} min={0} max={audioData.data.length / 100}
+                    sx={{
+                      height: '100%',
+                      '& .MuiSlider-rail': {
+                        opacity: 0,
+                      },
+                      '& .MuiSlider-track': {
+                        display: 'none',
+                      },
+                      '& .MuiSlider-thumb': {
+                        height: '100%',
+                        width: 3,
+                        borderRadius: 0,
+                        backgroundColor: 'red',
+                      },
+                    }} />
           </div>
       </div>
     </div>
