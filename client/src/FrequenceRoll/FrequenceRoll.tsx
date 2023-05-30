@@ -105,7 +105,7 @@ const FrequenceRoll: FC<FrequenceRollProps> = ({ audioData, audioPlayerState }) 
       <div className="frequence-roll-main-container">
           <div className="frequence-roll-piano-notes-container">
             <PianoRoll audioData={audioData} time={value} />
-            <Slider value={value} min={0} max={audioData.data.length} step={0.01} onChange={handleChange}/>
+            {/* <Slider value={value} min={0} max={audioData.data.length} step={0.01} onChange={handleChange}/> */}
           </div>
       </div>
     </div>
