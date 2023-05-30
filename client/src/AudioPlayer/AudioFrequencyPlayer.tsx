@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from "react";
 import {
   AudioDataFromServerInitialState,
   AudioDataFromServerState,
@@ -25,12 +25,15 @@ import { SynthState } from "../types/SynthState";
 
 interface AudioFrequencyPlayerProps {
   audioData: AudioDataFromServerState;
+
+  audioPlayerState: AudioPlayerState;
+  setAudioPlayerState:  Dispatch<SetStateAction<AudioPlayerState>>;
 }
 
-const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
-  const [audioPlayerState, setAudioPlayerState] = useState<AudioPlayerState>(
-    AudioPlayerInitialState
-  );
+const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData, audioPlayerState, setAudioPlayerState }) => {
+  // const [audioPlayerState, setAudioPlayerState] = useState<AudioPlayerState>(
+  //   AudioPlayerInitialState
+  // );
   const [synthAttack, setSynthAttack] = useState<number>();
   const Synth = useSynth({
     envelope: {
@@ -61,6 +64,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
       seqRef.current = new Tone.Sequence(
         (time, { frequency, confidence }) => {
           if (confidence > 0.7) {
+            console.log(Tone.Transport.seconds);
             currentInstrumentState.synth.triggerAttackRelease(
               frequency,
               0.1,
@@ -103,7 +107,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({ audioData }) => {
     if (Tone.Transport.state === "started") {
       Tone.Transport.stop();
       setAudioPlayerState((state) => {
-        return { ...state, isPlaying: false };
+        return {...state, isPlaying: false};
       });
     } else {
       await Tone.start();
