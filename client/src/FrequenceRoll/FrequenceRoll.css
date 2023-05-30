@@ -1,15 +1,17 @@
 .frequence-roll-main-container {
     display: flex;
     flex: 1;
-    height: 90%;
-    background-color: var(--dark-grey);
+    height: 100%;
+    background-color: var(--light-grey);
     box-shadow: 2px 2px 4px rgb(0 0 0 / 42%);
     border-radius: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 .frequence-roll-border-container {
     display: flex;
-    flex: 3;
+    flex: 16;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -23,6 +25,7 @@
     overflow: auto;
     background-color: var(--light-grey);
     position: relative;
+
 }
 
 .frequence-roll-piano-notes-container table {

@@ -16,13 +16,13 @@ const AudioResults: FC<AudioResultsProps> = ({ audioData }) => {
 
   return (
     <div className="audio-results-main-container">
+      <FrequenceRoll
+        audioData={audioData}
+        audioPlayerState={audioPlayerState} />
       <AudioFrequencyPlayer
         audioData={audioData}
         audioPlayerState={audioPlayerState}
         setAudioPlayerState={setAudioPlayerState} />
-      <FrequenceRoll
-        audioData={audioData}
-        audioPlayerState={audioPlayerState} />
     </div>
   );
 };

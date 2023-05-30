@@ -111,7 +111,8 @@ input[type=range].audio-progress-bar::-webkit-slider-thumb {
     color: white;
     padding: 0.75em;
     border-radius: 10px;
-    width: 8em
+    width: 8em;
+    z-index: 6;
 }
 
 .audio-player-time-indicator-container {

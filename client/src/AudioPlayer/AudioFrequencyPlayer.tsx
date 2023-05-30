@@ -48,7 +48,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
   const [synthAttack, setSynthAttack] = useState<number>();
   const Synth = useSynth({
     envelope: {
-      attack: 0.5,
+      attack: 0,
     },
   });
   const FMSynth = useFMSynth({
@@ -74,7 +74,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
     if (audioData.isSuccessFetching && audioData.data.length !== 0) {
       seqRef.current = new Tone.Sequence(
         (time, { frequency, confidence }) => {
-          if (confidence > 0.7) {
+          if (confidence > 0.8) {
             console.log(Tone.Transport.seconds);
             currentInstrumentState.synth.triggerAttackRelease(
               frequency,
@@ -132,9 +132,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
   return (
     <div className="audio-frequency-player-border-container">
       <div className="audio-frequency-player-main-container">
-        {audioData.isLoadingFetching ? (
-          <LoadingAnimation />
-        ) : audioData.data.length !== 0 && (
+        {audioData.data.length !== 0 && (
           <div className="audio-frequency-player-controls-container">
             {audioPlayerState.isPlaying ? (
               <SimpleSVGComponent
@@ -142,8 +140,8 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
                 alt="pause-icon"
                 cursor={true}
                 onClick={() => handleButtonClick()}
-                width="3rem"
-                height="3rem"
+                width="2rem"
+                height="2rem"
               />
             ) : (
               <SimpleSVGComponent
@@ -151,8 +149,8 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
                 alt="play-icon"
                 cursor={true}
                 onClick={() => handleButtonClick()}
-                width="3rem"
-                height="3rem"
+                width="2rem"
+                height="2rem"
               />
             )}
             <BigRoundedButton
