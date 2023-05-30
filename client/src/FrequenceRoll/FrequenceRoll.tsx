@@ -25,9 +25,9 @@ interface PianoRollProps {
   audioData: AudioDataFromServerState;
 }
 
-const PianoRoll: FC<PianoRollProps> = ({audioData}) => {
+const PianoRoll: FC<PianoRollProps> = ({ audioData }) => {
   const confidence = 0.7;
-  const pianoColumnRollPadding = 2
+  const pianoColumnRollPadding = 2;
 
   const tones = audioData.data.map((data) => data.tone);
   const confidences = audioData.data.map((data) => data.confidence);
@@ -114,8 +114,11 @@ const PianoRoll: FC<PianoRollProps> = ({audioData}) => {
   );
 };
 
-const FrequenceRoll: FC<FrequenceRollProps> = ({ audioData, audioPlayerState, setAudioPlayerState }) => {
-
+const FrequenceRoll: FC<FrequenceRollProps> = ({
+  audioData,
+  audioPlayerState,
+  setAudioPlayerState,
+}) => {
   const [time, setTime] = useState<number>(0);
 
   useEffect(() => {
@@ -149,22 +152,27 @@ const FrequenceRoll: FC<FrequenceRollProps> = ({ audioData, audioPlayerState, se
         ) : audioData.data.length !== 0 ? (
           <div className="frequence-roll-piano-notes-container">
             <PianoRoll audioData={audioData} />
-            <Slider value={time} min={0} max={audioData.data.length / 100}
-                    sx={{
-                      height: '100%',
-                      '& .MuiSlider-rail': {
-                        opacity: 0,
-                      },
-                      '& .MuiSlider-track': {
-                        display: 'none',
-                      },
-                      '& .MuiSlider-thumb': {
-                        height: '100%',
-                        width: 3,
-                        borderRadius: 0,
-                        backgroundColor: 'red',
-                      },
-                    }} />
+            <Slider
+              value={time}
+              min={0}
+              max={audioData.data.length / 100}
+              sx={{
+                height: "100%",
+                padding: 0,
+                "& .MuiSlider-rail": {
+                  opacity: 0,
+                },
+                "& .MuiSlider-track": {
+                  display: "none",
+                },
+                "& .MuiSlider-thumb": {
+                  height: "100%",
+                  width: 3,
+                  borderRadius: 0,
+                  backgroundColor: "red",
+                },
+              }}
+            />
           </div>
         ) : (
           <RoundedTextInfo text="Waiting for a file ..." />
