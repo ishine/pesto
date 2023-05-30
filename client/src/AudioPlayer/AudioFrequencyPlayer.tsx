@@ -56,14 +56,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
       attack: 0,
     },
   });
-  const MonoSynth = useMonoSynth({
-    envelope: {
-      attack: 0.5,
-    },
-    oscillator: {
-      type: "square",
-    },
-  });
+  const MonoSynth = useMonoSynth({});
   const [currentInstrumentState, setCurrentInstrumentState] =
     useState<SynthState>({ synth: Synth, attack: 0 });
   const AutoWah = useAutoWah({ Q: 6 });
@@ -102,6 +95,12 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
       console.log(audioData.data);
     }
   }, [audioData.isSuccessFetching, audioData.data]);
+
+  useEffect(() => {
+    if (currentInstrumentState.synth) {
+      currentInstrumentState.synth.connect(AutoWah);
+    }
+  }, [currentInstrumentState.synth, AutoWah]);
 
   // const onClickAutoWah = () => {
   //   if (isAutoWahSelected) {
