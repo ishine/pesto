@@ -34,6 +34,7 @@
 
 .darkgrey-cell {
     background-color: #28272c;
+    width: 25px;
 }
 
 .red-cell {
@@ -77,12 +78,6 @@ table {
     height: 100%;
 }
 
-td {
-    border: 1px solid #28272c;
-    border-left: none;
-    border-right: none;
-}
-
 tr {
     height: fit-content;
 }
@@ -97,8 +92,8 @@ tbody td:first-child {
     z-index: 3;
 }
 
-.canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
+td {
+    border: 1px solid #28272c;
+    border-left: none;
+    border-right: none;
 }
