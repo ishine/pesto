@@ -50,6 +50,8 @@ def before_each_api_request():
 
 def after_each_api_request():
     user_id = g.get('user_id', None)
+    user_folder_path = g.get('user_folder_path', None)
+
     user_activity[user_id] = datetime.now().isoformat()
 
 
@@ -95,6 +97,8 @@ def post_audiofile_upload():
     user_id = g.get('user_id', None)
     user_folder_path = g.get('user_folder_path', None)
 
+    from_recorder = extract_request_argument(request, 'fromRecorder')
+
     # Check if file was passed as request parameter, if not send response with http code 400
     if 'file' not in request.files:
         return Flask.response_class(
@@ -102,6 +106,10 @@ def post_audiofile_upload():
             status=HTTPStatus.BAD_REQUEST,
             mimetype='application/json'
         )
+
+    for files in os.listdir(user_folder_path):
+        if files.endswith((".wav", ".csv")):
+            os.remove(os.path.join(user_folder_path, files))
 
     # Assign the file passed as parameter to local variable
     file = request.files['file']
@@ -119,15 +127,11 @@ def post_audiofile_upload():
             mimetype='application/json'
         )
 
-    for files in os.listdir(user_folder_path):
-        if files.endswith((".wav", ".csv")):
-            os.remove(os.path.join(user_folder_path, files))
-
     # Assign the file filename to local variable using secure_filename (from Werkzeug) which returns a secure version
     # of it so that it can be safely stored
     filename = secure_filename(file.filename)
 
-    if file.filename.endswith((".wav")):
+    if from_recorder == "true":
         file_name, extension = os.path.splitext(filename)
         file_path = os.path.join(user_folder_path, file_name + extension)
         file.save(file_path)
@@ -143,11 +147,8 @@ def post_audiofile_upload():
 
         os.remove(file_path)
     else:
-        return Flask.response_class(
-            response='File format not supported',
-            status=HTTPStatus.BAD_REQUEST,
-            mimetype='application/json'
-        )
+        file_path = os.path.join(user_folder_path, "audiofile.wav")
+        file.save(file_path)
 
     return response, HTTPStatus.OK
 
