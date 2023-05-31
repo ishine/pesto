@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import "./AudioResults.css";
 import { AudioDataFromServerState } from "../types/AudioDataFromServer";
 import AudioFrequencyPlayer from "../AudioPlayer/AudioFrequencyPlayer";
@@ -21,8 +21,6 @@ const AudioResults: FC<AudioResultsProps> = ({ audioData }) => {
     <div className="audio-results-main-container">
       <FrequenceRoll
         audioData={audioData}
-        audioPlayerState={audioPlayerState}
-        setAudioPlayerState={setAudioPlayerState}
       />
       <AudioFrequencyPlayer
         audioData={audioData}
