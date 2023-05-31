@@ -65,10 +65,11 @@ const MainContainer: FC = () => {
   }, [currentUploadedFileState.isSuccessUploading]);
 
   const onUpload = useCallback((file: File[]) => {
-    uploadFileToServer(file[0]);
+    uploadFileToServer(file[0], false);
   }, []);
 
-  const uploadFileToServer = (file: File) => {
+  const uploadFileToServer = (file: File, fromRecorder: boolean) => {
+    const fromRecordParameter = fromRecorder ? '?fromRecorder=true' : '';
     setCurrentUploadedFileState((state) => {
       return {
         ...state,
@@ -80,7 +81,7 @@ const MainContainer: FC = () => {
     const data = new FormData();
     data.append("file", file);
     axios
-      .post(`${API_ENDPOINT}/audiofile/upload`, data, {
+      .post(`${API_ENDPOINT}/audiofile/upload${fromRecordParameter}`, data, {
         headers: {
           "User-Id": localStorage.getItem("user_id"),
         },
@@ -99,8 +100,8 @@ const MainContainer: FC = () => {
 
   const onGetAudioRecorderElement = (blob: Blob) => {
     console.log(blob);
-    const file = new File([blob], "audio-record.wav", { type: blob.type });
-    uploadFileToServer(file);
+    const file = new File([blob], "audio-record.wav", { type: 'audio/wav' });
+    uploadFileToServer(file, true);
   };
 
   return (
