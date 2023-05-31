@@ -79,7 +79,6 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
         audioData.data,
         0.01
       ).start(0);
-      console.log(seqRef.current);
     }
     return () => {
       seqRef.current?.dispose();
@@ -90,11 +89,11 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
     currentInstrumentState.synth,
   ]);
 
-  useEffect(() => {
-    if (audioData.isSuccessFetching && audioData.data.length !== 0) {
-      console.log(audioData.data);
-    }
-  }, [audioData.isSuccessFetching, audioData.data]);
+  // useEffect(() => {
+  //   if (audioData.isSuccessFetching && audioData.data.length !== 0) {
+  //     console.log(audioData.data);
+  //   }
+  // }, [audioData.isSuccessFetching, audioData.data]);
 
   useEffect(() => {
     if (currentInstrumentState.synth) {
