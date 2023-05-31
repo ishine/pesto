@@ -114,6 +114,64 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData }) => {
   );
 };
 
+interface PianoRoll2Props {
+  audioData: AudioDataFromServerState;
+}
+
+const PianoRoll2: FC<PianoRoll2Props> = ({ audioData }) => {
+  const pianoColumnRollPadding = 2;
+  const confidence = 0.8;
+  const blockWidth = 5;
+  const blockHeight = 5;
+  const totalWidth = audioData.data.length * blockWidth;
+
+  const newData = audioData.data.map((data, index) => {
+    return {
+      frequency: data.frequency,
+      index: index,
+      confidence: data.confidence,
+      tone: data.tone,
+    };
+  });
+
+  const newDataFiltered = newData.filter(
+    (data) => data.confidence >= confidence
+  );
+
+  const tones = audioData.data.map((data) => data.tone);
+  const confidences = audioData.data.map((data) => data.confidence);
+
+  const confidenceValidatedTones = tones.filter(
+    (_, i) => confidences[i] > confidence
+  );
+
+  const width = tones.length;
+  const toneMax = Math.ceil(
+    Math.max(...confidenceValidatedTones) + pianoColumnRollPadding
+  );
+  const toneMin = Math.floor(
+    Math.min(...confidenceValidatedTones) - pianoColumnRollPadding
+  );
+  const nbOfTones = toneMax - toneMin;
+
+  console.log(newDataFiltered);
+
+  return (
+    <svg width={totalWidth} height="100%">
+      {newDataFiltered.map((data) => (
+        <rect
+          key={data.index}
+          x={data.index * blockWidth}
+          y={(data.tone - toneMin) * blockHeight}
+          width={10}
+          height={10}
+          fill="blue"
+        />
+      ))}
+    </svg>
+  );
+};
+
 const FrequenceRoll: FC<FrequenceRollProps> = ({
   audioData,
   audioPlayerState,
@@ -151,8 +209,8 @@ const FrequenceRoll: FC<FrequenceRollProps> = ({
           <LoadingAnimation />
         ) : audioData.data.length !== 0 ? (
           <div className="frequence-roll-piano-notes-container">
-            <PianoRoll audioData={audioData} />
-            <Slider
+            <PianoRoll2 audioData={audioData} />
+            {/* <Slider
               value={time}
               min={0}
               max={audioData.data.length / 100}
@@ -172,7 +230,7 @@ const FrequenceRoll: FC<FrequenceRollProps> = ({
                   backgroundColor: "red",
                 },
               }}
-            />
+            /> */}
           </div>
         ) : (
           <RoundedTextInfo text="Waiting for a file ..." />

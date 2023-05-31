@@ -6,7 +6,6 @@
     box-shadow: 2px 2px 4px rgb(0 0 0 / 42%);
     border-radius: 10px;
     align-items: center;
-    justify-content: center;
 }
 
 .frequence-roll-border-container {
@@ -14,7 +13,7 @@
     flex: 16;
     height: 100%;
     align-items: center;
-    justify-content: center;
+    overflow-x: auto;
 }
 
 .frequence-roll-piano-notes-container {
