@@ -49,11 +49,6 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
   // FOCUS SCROLL ON TIME PROGRESS BAR USING A REF
   const pianoRollContainerRef = useRef<any>();
 
-  useEffect(() => {
-    console.log('its moving');
-    keepLineCentered();
-  }, [lineRef, time])
-
   const keepLineCentered = useCallback(() => {
     const element = pianoRollContainerRef.current?.querySelector(".piano-roll-time-line");
 
@@ -62,7 +57,11 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
         inline: "center"
       })
     }
-  }, [lineRef, time]);
+  }, []);
+
+  useEffect(() => {
+    keepLineCentered();
+  }, [keepLineCentered, lineRef, time])
 
   const animateLine = useCallback(() => {
     const lineElement = lineRef.current;
