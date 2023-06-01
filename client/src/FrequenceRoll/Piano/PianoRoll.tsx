@@ -137,12 +137,6 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
             y1={0} y2="100%"
             stroke="red" strokeWidth={2}
         />
-
-        <line
-            x1={0} x2={rangeOfNotesWidth}
-            y1="50%" y2="50%"
-            stroke="red" strokeWidth={0.5}
-        />
       </svg>
     </div>
   );
