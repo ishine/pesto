@@ -1,4 +1,4 @@
-import { FC } from "react";
+import {FC, useMemo} from "react";
 import {AudioDataFromServerState} from "../../types/AudioDataFromServer";
 
 interface PianoTilesProps {
@@ -10,26 +10,26 @@ interface PianoTilesProps {
 }
 
 const PianoTiles: FC<PianoTilesProps> = ({ audioData, confidence, height, width }) => {
-  const confidenceValidatedTones = audioData.data.filter(
+  const confidenceValidatedTones = useMemo(() => { return audioData.data.filter(
     (data) => data.confidence >= confidence
-  );
+  ); }, [audioData, confidence]);
 
-  const tones = confidenceValidatedTones.map((data) => data.tone);
+  const tones = useMemo(() => { return confidenceValidatedTones.map((data) => data.tone) }, [confidenceValidatedTones]);
 
-  const maxTone = tones.reduce((max, data) => (data > max ? data : max), -Infinity);
-  const lowestTone = tones.reduce((min, data) => (data < min ? data : min), Infinity);
+  const maxTone = useMemo(() => { return tones.reduce((max, data) => (data > max ? data : max), -Infinity) }, [tones]);
+  const lowestTone = useMemo(() => { return tones.reduce((min, data) => (data < min ? data : min), Infinity) }, [tones]);
 
-  const rangeOfTone = Math.floor(maxTone) - Math.floor(lowestTone);
+  const rangeOfTone = useMemo(() => { return Math.floor(maxTone) - Math.floor(lowestTone) }, [maxTone, lowestTone]);
 
   const blockWidth = 15;
-  const blockHeight = height / rangeOfTone;
+  const blockHeight = useMemo(() => { return height / rangeOfTone }, [height, rangeOfTone]);
 
-  const rangeOfTonesHeight = rangeOfTone * blockHeight;
+  const rangeOfTonesHeight = useMemo(() => { return rangeOfTone * blockHeight }, [rangeOfTone, blockHeight]);
 
   return (
     <div className="piano-tiles-container" >
       <svg height={rangeOfTonesHeight} width={blockWidth} >
-        {Array.from({ length: rangeOfTone }).map((_, index) => {
+        {useMemo(() => { return Array.from({ length: rangeOfTone }).map((_, index) => {
           const rectWidth = blockWidth;
           const rectHeight = blockHeight;
           const rectX = 0;
@@ -47,7 +47,7 @@ const PianoTiles: FC<PianoTilesProps> = ({ audioData, confidence, height, width 
               stroke={"black"} strokeWidth={1}
             />
           );
-        })}
+        })}, [blockHeight, rangeOfTone])}
       </svg>
     </div>
   );

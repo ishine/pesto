@@ -13,7 +13,7 @@ interface PianoRollProps {
 }
 
 const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, time }) => {
-  const indexedAudioData = audioData.data.map((data, index) => {
+  const indexedAudioData = useMemo(() => { return audioData.data.map((data, index) => {
     return {
       index: index,
 
@@ -23,24 +23,24 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
 
       third: (data.tone - Math.floor(data.tone)).toPrecision(4)
     };
-  });
+  })}, [audioData.data]);
 
-  const confidenceValidatedTones = indexedAudioData.filter(
+  const confidenceValidatedTones = useMemo(() => { return indexedAudioData.filter(
     (data) => data.confidence >= confidence
-  );
+  )}, [confidence, indexedAudioData]);
 
-  const tones = confidenceValidatedTones.map((data) => data.tone);
+  const tones = useMemo(() => { return confidenceValidatedTones.map((data) => data.tone); }, [confidenceValidatedTones]);
 
-  const maxTone = tones.reduce((max, data) => (data > max ? data : max), -Infinity);
-  const lowestTone = tones.reduce((min, data) => (data < min ? data : min), Infinity);
+  const maxTone = useMemo(() => { return tones.reduce((max, data) => (data > max ? data : max), -Infinity); }, [tones]);
+  const lowestTone = useMemo(() => { return tones.reduce((min, data) => (data < min ? data : min), Infinity); }, [tones]);
 
-  const rangeOfTone = Math.floor(maxTone) - Math.floor(lowestTone)
+  const rangeOfTone = useMemo(() => { return Math.floor(maxTone) - Math.floor(lowestTone) }, [lowestTone, maxTone]);
 
   const blockWidth = 2;
-  const blockHeight = height / rangeOfTone;
+  const blockHeight = useMemo(() => { return height / rangeOfTone; }, [height, rangeOfTone]);
 
-  const rangeOfTonesHeight = rangeOfTone * blockHeight;
-  const rangeOfNotesWidth = audioData.data.length * blockWidth;
+  const rangeOfTonesHeight = useMemo(() => { return rangeOfTone * blockHeight; }, [blockHeight, rangeOfTone]);
+  const rangeOfNotesWidth = useMemo(() => { return audioData.data.length * blockWidth; }, [audioData.data.length]);
 
   // ANIMATION OF THE TIME PROGRESS BAR USING REFs AND REQUEST ANIMATION FRAME
   const lineRef = useRef<any>();
@@ -109,7 +109,7 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
           </linearGradient>
         </defs>
 
-        {confidenceValidatedTones.map((data) => {
+        {useMemo(() => { return confidenceValidatedTones.map((data) => {
           const rectWidth = blockWidth;
           const rectHeight = blockHeight;
           const rectX = (data.index * blockWidth) + blockWidth;
@@ -128,7 +128,7 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
                       "rgba(63,64,61,1)")}
             />
           );
-        })}
+        })}, [blockHeight, confidenceValidatedTones, maxTone])}
 
         <line
             ref={lineRef}
