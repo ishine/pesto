@@ -134,7 +134,7 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
             className="piano-roll-time-line"
             x1={time * blockWidth} x2={time * blockWidth}
             y1={0} y2="100%"
-            stroke="red" strokeWidth={2}
+            stroke="grey" strokeWidth={2}
         />
       </svg>
     </div>
