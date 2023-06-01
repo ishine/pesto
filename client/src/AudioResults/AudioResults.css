@@ -10,4 +10,6 @@
     padding: 1.5rem;
     gap: 1rem;
     box-sizing: border-box;
+
+    overflow: hidden;
 }
