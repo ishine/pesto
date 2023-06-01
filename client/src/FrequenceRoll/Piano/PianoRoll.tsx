@@ -89,20 +89,20 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
           <linearGradient id="top-third" gradientTransform="rotate(90)">
             <stop offset="0%" stopColor="rgba(224,78,224,0.9)" />
             <stop offset="33%" stopColor="rgba(224,78,224,0.9)" />
-            <stop offset="33%" stopColor="rgba(63,64,61,1)" />
-            <stop offset="100%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="33%" stopColor="rgba(63,64,67,1)" />
+            <stop offset="100%" stopColor="rgba(63,64,67,1)" />
           </linearGradient>
           <linearGradient id="mid-third" gradientTransform="rotate(90)">
-            <stop offset="0%" stopColor="rgba(63,64,61,1)" />
-            <stop offset="33%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="0%" stopColor="rgba(63,64,67,1)" />
+            <stop offset="33%" stopColor="rgba(63,64,67,1)" />
             <stop offset="33%" stopColor="rgba(255, 0, 255, 0.7)" />
             <stop offset="67%" stopColor="rgba(255, 0, 255, 0.7)" />
-            <stop offset="67%" stopColor="rgba(63,64,61,1)" />
-            <stop offset="100%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="67%" stopColor="rgba(63,64,67,1)" />
+            <stop offset="100%" stopColor="rgba(63,64,67,1)" />
           </linearGradient>
           <linearGradient id="bottom-third" gradientTransform="rotate(90)">
-            <stop offset="0%" stopColor="rgba(63,64,61,1)" />
-            <stop offset="67%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="0%" stopColor="rgba(63,64,67,1)" />
+            <stop offset="67%" stopColor="rgba(63,64,67,1)" />
             <stop offset="67%" stopColor="rgba(161,13,161,0.5)" />
             <stop offset="100%" stopColor="rgba(161,13,161,0.5)" />
           </linearGradient>
