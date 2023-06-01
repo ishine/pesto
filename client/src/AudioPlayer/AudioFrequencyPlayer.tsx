@@ -68,7 +68,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
       seqRef.current = new Tone.Sequence(
         (time, { frequency, confidence }) => {
           if (confidence > 0.8) {
-            console.log(Tone.Transport.seconds);
+            // console.log(Tone.Transport.seconds);
             currentInstrumentState.synth.triggerAttackRelease(
               frequency,
               0.1,
@@ -79,7 +79,6 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
         audioData.data,
         0.01
       ).start(0);
-      console.log(seqRef.current);
     }
     return () => {
       seqRef.current?.dispose();
@@ -90,11 +89,11 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
     currentInstrumentState.synth,
   ]);
 
-  useEffect(() => {
-    if (audioData.isSuccessFetching && audioData.data.length !== 0) {
-      console.log(audioData.data);
-    }
-  }, [audioData.isSuccessFetching, audioData.data]);
+  // useEffect(() => {
+  //   if (audioData.isSuccessFetching && audioData.data.length !== 0) {
+  //     console.log(audioData.data);
+  //   }
+  // }, [audioData.isSuccessFetching, audioData.data]);
 
   useEffect(() => {
     if (currentInstrumentState.synth) {

@@ -37,9 +37,7 @@ const CustomAudioPlayer: FC<CustomAudioPlayerProps> = ({ file, isSuccessUploadin
       setIsPlaying(false);
       timeProgressBar.current.value = 0;
       setUrl(tmpUrl);
-      console.log(file);
       const seconds = Math.floor(audioPlayer?.current?.duration);
-      console.log(seconds);
     }
   }, [isSuccessUploadingFile]);
 
