@@ -19,10 +19,11 @@ const PianoTiles: FC<PianoTilesProps> = ({ audioData, confidence, height, width 
   const maxTone = tones.reduce((max, data) => (data > max ? data : max), -Infinity);
   const lowestTone = tones.reduce((min, data) => (data < min ? data : min), Infinity);
 
-  const blockWidth = 15;
-  const blockHeight = 10;
+  const rangeOfTone = Math.floor(maxTone) - Math.floor(lowestTone);
 
-  const rangeOfTone = Math.floor(maxTone) - Math.floor(lowestTone)
+  const blockWidth = 15;
+  const blockHeight = height / rangeOfTone;
+
   const rangeOfTonesHeight = rangeOfTone * blockHeight;
 
   return (
@@ -42,7 +43,7 @@ const PianoTiles: FC<PianoTilesProps> = ({ audioData, confidence, height, width 
               x={rectX} y={rectY}
               width={rectWidth} height={rectHeight}
 
-              fill={'white'}
+              fill={"white"}
               stroke={"black"} strokeWidth={1}
             />
           );
