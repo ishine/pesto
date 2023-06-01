@@ -13,9 +13,6 @@ interface PianoRollProps {
 }
 
 const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, time }) => {
-  const blockWidth = 1.5;
-  const blockHeight = 10;
-
   const indexedAudioData = audioData.data.map((data, index) => {
     return {
       index: index,
@@ -23,6 +20,8 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
       frequency: data.frequency,
       tone: data.tone,
       confidence: data.confidence,
+
+      third: (data.tone - Math.floor(data.tone)).toPrecision(4)
     };
   });
 
@@ -31,18 +30,39 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
   );
 
   const tones = confidenceValidatedTones.map((data) => data.tone);
-  const confidences = confidenceValidatedTones.map((data) => data.confidence);
 
   const maxTone = tones.reduce((max, data) => (data > max ? data : max), -Infinity);
   const lowestTone = tones.reduce((min, data) => (data < min ? data : min), Infinity);
 
   const rangeOfTone = Math.floor(maxTone) - Math.floor(lowestTone)
+
+  const blockWidth = 2;
+  const blockHeight = height / rangeOfTone;
+
   const rangeOfTonesHeight = rangeOfTone * blockHeight;
   const rangeOfNotesWidth = audioData.data.length * blockWidth;
 
   // ANIMATION OF THE TIME PROGRESS BAR USING REFs AND REQUEST ANIMATION FRAME
   const lineRef = useRef<any>();
   const animation = useRef<any>();
+
+  // FOCUS SCROLL ON TIME PROGRESS BAR USING A REF
+  const pianoRollContainerRef = useRef<any>();
+
+  useEffect(() => {
+    console.log('its moving');
+    keepLineCentered();
+  }, [lineRef, time])
+
+  const keepLineCentered = useCallback(() => {
+    const element = pianoRollContainerRef.current?.querySelector(".piano-roll-time-line");
+
+    if (element) {
+      element.scrollIntoView({
+        inline: "center"
+      })
+    }
+  }, [lineRef, time]);
 
   const animateLine = useCallback(() => {
     const lineElement = lineRef.current;
@@ -64,8 +84,30 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
 
   // RENDERING OF THE PIANO ROLL COMPONENT
   return (
-    <div className="piano-roll-container">
+    <div ref={pianoRollContainerRef} className="piano-roll-container">
       <svg height={rangeOfTonesHeight} width={rangeOfNotesWidth} >
+        <defs>
+          <linearGradient id="top-third" gradientTransform="rotate(90)">
+            <stop offset="0%" stopColor="rgba(224,78,224,0.9)" />
+            <stop offset="33%" stopColor="rgba(224,78,224,0.9)" />
+            <stop offset="33%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="100%" stopColor="rgba(63,64,61,1)" />
+          </linearGradient>
+          <linearGradient id="mid-third" gradientTransform="rotate(90)">
+            <stop offset="0%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="33%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="33%" stopColor="rgba(255, 0, 255, 0.7)" />
+            <stop offset="67%" stopColor="rgba(255, 0, 255, 0.7)" />
+            <stop offset="67%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="100%" stopColor="rgba(63,64,61,1)" />
+          </linearGradient>
+          <linearGradient id="bottom-third" gradientTransform="rotate(90)">
+            <stop offset="0%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="67%" stopColor="rgba(63,64,61,1)" />
+            <stop offset="67%" stopColor="rgba(161,13,161,0.5)" />
+            <stop offset="100%" stopColor="rgba(161,13,161,0.5)" />
+          </linearGradient>
+        </defs>
 
         {confidenceValidatedTones.map((data) => {
           const rectWidth = blockWidth;
@@ -79,14 +121,18 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
               key={data.index}
               x={rectX} y={rectY}
               width={rectWidth} height={rectHeight}
-              fill={'rgba(161,13,161,0.5)'}
-              stroke={"green"} strokeWidth={1}
+              fill={(
+                data.third === (0).toPrecision(4) ? "url(#top-third)" :
+                  data.third === (1/3).toPrecision(4) ? "url(#mid-third)" :
+                    data.third === (2/3).toPrecision(4) ? "url(#bottom-third)" :
+                      "rgba(63,64,61,1)")}
             />
           );
         })}
 
         <line
             ref={lineRef}
+            className="piano-roll-time-line"
             x1={time * blockWidth} x2={time * blockWidth}
             y1={0} y2="100%"
             stroke="red" strokeWidth={2}
