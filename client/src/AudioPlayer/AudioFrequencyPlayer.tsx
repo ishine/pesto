@@ -67,7 +67,7 @@ const AudioFrequencyPlayer: FC<AudioFrequencyPlayerProps> = ({
     if (audioData.isSuccessFetching && audioData.data.length !== 0) {
       seqRef.current = new Tone.Sequence(
         (time, { frequency, confidence }) => {
-          if (confidence > 0.8) {
+          if (confidence >= 0.8) {
             // console.log(Tone.Transport.seconds);
             currentInstrumentState.synth.triggerAttackRelease(
               frequency,

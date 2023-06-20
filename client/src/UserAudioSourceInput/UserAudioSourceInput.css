@@ -14,7 +14,7 @@
 
 .upload-and-record-border-container {
     display: flex;
-    flex: 1;
+    flex: 0.5;
     height: 100%;
     align-items: center;
 }
