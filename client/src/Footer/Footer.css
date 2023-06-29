@@ -1,0 +1,12 @@
+.footer-main-container {
+    display: flex;
+    height: 8vh;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: white;
+    background-color: var(--dark-grey);
+    font-weight: 200;
+    font-size: 12px;
+}
