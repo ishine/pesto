@@ -18,7 +18,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pesto-server.entrypoints=http"
-      - "traefik.http.routers.pesto-server.rule=Host(`pesto-server.cslmusic.team`)"
+      - "traefik.http.routers.pesto-server.rule=Host(`pesto-api.cslmusic.team`)"
       - "traefik.http.middlewares.pesto-server-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.pesto-server.middlewares=pesto-server-https-redirect"
       - "traefik.http.routers.pesto-server-secure.entrypoints=https"
