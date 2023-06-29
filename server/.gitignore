@@ -1,6 +1,7 @@
 # Project Folders
 models/
 venv/
+data/
 
 # Project Files
 *__pycache__/
