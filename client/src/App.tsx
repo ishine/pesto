@@ -1,15 +1,16 @@
 import React from "react";
 import "./App.css";
-import MainTests from "./MainTests/MainTests";
-import MainContainer from "./MainContainer/MainContainer";
+
 import Header from "./Header/Header";
+import MainContainer from "./MainContainer/MainContainer";
+import Footer from "./Footer/Footer";
 
 function App() {
   return (
     <div className="app-main-container">
-      {/* <MainTests /> */}
       <Header />
       <MainContainer />
+      <Footer />
     </div>
   );
 }
