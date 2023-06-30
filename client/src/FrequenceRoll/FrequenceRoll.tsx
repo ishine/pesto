@@ -51,14 +51,18 @@ const FrequenceRoll: FC<FrequenceRollProps> = ({
     <div ref={frequenceRollBorderMainContainer} className="frequence-roll-border-container">
       <div className="frequence-roll-main-container">
         {audioData.isLoadingFetching ? (
-          <LoadingAnimation />
+          <div className="frequence-roll-main-container-loading">
+            <LoadingAnimation />
+          </div>
         ) : audioData.data.length !== 0 ? (
           <div className="piano-roll-main-container">
               <PianoTiles audioData={audioData} confidence={0.8} height={containerHeight} width={containerWidth} />
               <PianoRoll audioData={audioData} confidence={0.8} height={containerHeight} width={containerWidth} time={time} />
           </div>
         ) : (
-          <RoundedTextInfo text="Waiting for a file ..." />
+          <div className="frequence-roll-main-container-loading blinking-effect">
+            <RoundedTextInfo text="Waiting for a file ..." />
+          </div>
         )}
       </div>
     </div>
