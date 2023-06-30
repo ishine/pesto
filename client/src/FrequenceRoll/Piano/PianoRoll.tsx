@@ -1,5 +1,5 @@
 import {AudioDataFromServerState} from "../../types/AudioDataFromServer";
-import {FC, useCallback, useEffect, useMemo, useRef} from "react";
+import React, {FC, useCallback, useEffect, useMemo, useRef} from "react";
 import * as Tone from "tone";
 
 interface PianoRollProps {
@@ -81,53 +81,102 @@ const PianoRoll: FC<PianoRollProps> = ({ audioData, confidence, height, width, t
     }
   }, [animateLine, time]);
 
+  const renderLines = () => {
+    const lines = [];
+
+    for (let i = 0; i < rangeOfTone; i++) {
+      const rectY = i * blockHeight;
+
+      lines.push(
+        <line
+          className="frequence-roll-piano-note-line"
+          key={`line-${i}`}
+          x1={0}
+          x2={rangeOfNotesWidth}
+
+          y1={rectY}
+          y2={rectY}
+
+          stroke="#ffffff"
+          strokeWidth={1}
+        />
+      );
+    }
+
+    return lines;
+  }
+
+  const renderRects = () => {
+    const rects = [];
+
+    for (let i = 0; i < confidenceValidatedTones.length; i++) {
+      const data = confidenceValidatedTones[i];
+      const rectX = (data.index * blockWidth) + blockWidth;
+      const rectY = (Math.floor(maxTone - data.tone) * blockHeight) + 0.7;
+      const rectWidth = blockWidth;
+      const rectHeight = blockHeight;
+
+      rects.push(
+        <rect
+          className="frequence-roll-piano-note-rect"
+          key={data.index}
+          x={rectX}
+          y={rectY}
+          width={
+          data.third === (0).toPrecision(4)
+            ? rectWidth
+            : data.third === (1 / 3).toPrecision(4)
+              ? rectWidth
+              : data.third === (2 / 3).toPrecision(4)
+                ? rectWidth
+                : 0.1
+          }
+          height={rectHeight - 2}
+          fill={
+          data.third === (0).toPrecision(4)
+            ? "url(#top-third)"
+            : data.third === (1 / 3).toPrecision(4)
+              ? "url(#mid-third)"
+              : data.third === (2 / 3).toPrecision(4)
+                ? "url(#bottom-third)"
+                : "rgba(63,64,61,1)"
+          }
+        />
+      );
+    }
+
+    return rects;
+  };
+
   // RENDERING OF THE PIANO ROLL COMPONENT
   return (
     <div ref={pianoRollContainerRef} className="piano-roll-container">
       <svg height={rangeOfTonesHeight} width={rangeOfNotesWidth} >
         <defs>
           <linearGradient id="top-third" gradientTransform="rotate(90)">
-            <stop offset="0%" stopColor="rgba(224,78,224,0.9)" />
-            <stop offset="33%" stopColor="rgba(224,78,224,0.9)" />
+            <stop offset="5%" stopColor="rgba(116, 180, 63, 1)" />
+            <stop offset="33%" stopColor="rgba(116, 180, 63, 1)" />
             <stop offset="33%" stopColor="rgba(63,64,67,1)" />
             <stop offset="100%" stopColor="rgba(63,64,67,1)" />
           </linearGradient>
           <linearGradient id="mid-third" gradientTransform="rotate(90)">
             <stop offset="0%" stopColor="rgba(63,64,67,1)" />
             <stop offset="33%" stopColor="rgba(63,64,67,1)" />
-            <stop offset="33%" stopColor="rgba(255, 0, 255, 0.7)" />
-            <stop offset="67%" stopColor="rgba(255, 0, 255, 0.7)" />
+            <stop offset="33%" stopColor="rgba(57, 113, 11, 1)" />
+            <stop offset="67%" stopColor="rgba(57, 113, 11, 1)" />
             <stop offset="67%" stopColor="rgba(63,64,67,1)" />
             <stop offset="100%" stopColor="rgba(63,64,67,1)" />
           </linearGradient>
           <linearGradient id="bottom-third" gradientTransform="rotate(90)">
             <stop offset="0%" stopColor="rgba(63,64,67,1)" />
             <stop offset="67%" stopColor="rgba(63,64,67,1)" />
-            <stop offset="67%" stopColor="rgba(161,13,161,0.5)" />
-            <stop offset="100%" stopColor="rgba(161,13,161,0.5)" />
+            <stop offset="67%" stopColor="rgba(65, 101, 81, 0.7)" />
+            <stop offset="100%" stopColor="rgba(65, 101, 81, 0.7)" />
           </linearGradient>
         </defs>
 
-        {useMemo(() => { return confidenceValidatedTones.map((data) => {
-          const rectWidth = blockWidth;
-          const rectHeight = blockHeight;
-          const rectX = (data.index * blockWidth) + blockWidth;
-          const rectY = Math.floor(maxTone - data.tone) * blockHeight;
-
-          return (
-            <rect
-              className="frequence-roll-piano-note-rect"
-              key={data.index}
-              x={rectX} y={rectY}
-              width={rectWidth} height={rectHeight}
-              fill={(
-                data.third === (0).toPrecision(4) ? "url(#top-third)" :
-                  data.third === (1/3).toPrecision(4) ? "url(#mid-third)" :
-                    data.third === (2/3).toPrecision(4) ? "url(#bottom-third)" :
-                      "rgba(63,64,61,1)")}
-            />
-          );
-        })}, [blockHeight, confidenceValidatedTones, maxTone])}
+        {renderLines()}
+        {renderRects()}
 
         <line
             ref={lineRef}

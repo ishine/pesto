@@ -35,11 +35,8 @@ const FrequenceRoll: FC<FrequenceRollProps> = ({
     if (frequenceRollBorderMainContainer.current != null && audioData.isSuccessFetching) {
       const divHeight = frequenceRollBorderMainContainer.current.offsetHeight;
       const divWidth = frequenceRollBorderMainContainer.current.offsetWidth;
-      console.log("The height of the frequenceRollBorderMainContainer div in pixels is: " + divHeight + "px by " + divWidth + "px");
       setContainerHeight(divHeight);
       setContainerWidth(divWidth)
-    } else {
-      console.log("it's null");
     }
   }, [
       frequenceRollBorderMainContainer.current?.offsetHeight,
