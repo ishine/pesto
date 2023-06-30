@@ -9,4 +9,5 @@
     background-color: var(--dark-grey);
     font-weight: 200;
     font-size: 12px;
+    flex-direction: column;
 }
