@@ -3,7 +3,7 @@ import { useDropzone } from "react-dropzone";
 import "./UploadFile.css";
 import LoadingAnimation from "../UI/LoadingAnimation";
 import SimpleSVGComponent from "../UI/SimpleSVGComponent";
-import addIcon from "../assets/add-icon.svg";
+import HandIcon from "../assets/hand-icon.svg";
 
 interface UploadFileProps {
   onUpload: (file: any) => void;
@@ -24,18 +24,20 @@ const UploadFile: FC<UploadFileProps> = ({ onUpload, isLoading, file }) => {
   });
   return (
     <div className="upload-file-main-container">
-      <div {...getRootProps({ className: "upload-file-dropzone" })}>
+      <div {...getRootProps({ className: "upload-file-dropzone", style: {
+          border: `1px ${(file?.name ? 'solid' : 'dashed')} #fff`
+        } })}>
         {isLoading ? (
           <LoadingAnimation width="15px" height="15px" />
         ) : file?.name ? (
           <>
-            <SimpleSVGComponent width="29%" alt="add-icon" icon={addIcon} />
+            <SimpleSVGComponent width="10%" alt="add-icon" icon={HandIcon} />
             <div>{file.name}</div>
           </>
         ) : (
           <>
-            <SimpleSVGComponent width="29%" alt="add-icon" icon={addIcon} />
-            <div>{"Upload file"}</div>
+            <SimpleSVGComponent width="10%" alt="add-icon" icon={HandIcon} />
+            <div className="upload-file-dropzone-text">{"Upload file"}</div>
           </>
         )}
         <input {...getInputProps()} />

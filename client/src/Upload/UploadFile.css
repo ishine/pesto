@@ -2,10 +2,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: auto;
-    height: auto;
+    width: 40%;
+    height: 70%;
+    position: relative;
 }
 
+.upload-file-dropzone-text {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.upload-file-dropzone-text:hover {
+    font-weight: 900;
+}
 
 .upload-file-dropzone {
     width: 100%;
@@ -18,5 +27,5 @@
     border-radius: 50px;
     font-size: 16px;
     gap: 1rem;
-    padding: 0.6rem 1rem;
+    position: relative;
 }
