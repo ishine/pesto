@@ -26,9 +26,8 @@ services:
       - "traefik.http.routers.pesto-server-secure.tls=true"
       - "traefik.http.routers.pesto-server-secure.tls.certresolver=http"
       - "traefik.http.routers.pesto-server-secure.service=pesto-server"
-      - "traefik.http.services.pesto-server.loadbalancer.server.port=5001"
+      - "traefik.http.services.pesto-server.loadbalancer.server.port=5010"
       - "traefik.docker.network=proxy"
-
 
 
   client:
